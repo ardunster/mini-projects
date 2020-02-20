@@ -9,7 +9,9 @@ Take numerical input and return a list of inputs, the arithmetic mean,
 and the median.
 
 Planned updates include: 
+
 Graph results including markers for mean and median in graph
+
 UI?
 
 
@@ -20,5 +22,9 @@ of die can be used. Displays results and sum, and saves results
 and sum to a log file.
 
 Planned updates:
+
+Modifier syntax
+
 UI?
 
+Dice roll visualization. 3d dice! 
