@@ -23,6 +23,8 @@ and sum to a log file.
 
 Planned updates:
 
+Implement classes?
+
 Modifier syntax
 
 UI?
