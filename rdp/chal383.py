@@ -45,16 +45,10 @@ def same_necklace(str1,str2):
     else:
         #try to match smallest common string
         for i in range(-1,-length-1,-1):
-#            print(i)
             if str2.find(str1[0:i]) > -1:
                 offset = str2.find(str1[0:i])
                 found = str1[0:i]
                 count = str2.count(found)
-#                print('found: ',str1[0:i],'\noffset: ',str2.find(str1[0:i]),'\nlen-off: ',str1[length-offset::],'\ncount: ',count)
-#                if not found:
-#                    return False
-#                if str2.find(str1[length-offset::]) == 0 and found:
-#                    return True
                 break
         
         
@@ -64,31 +58,30 @@ def same_necklace(str1,str2):
         elif count > 1 and found:
             for i in range(count):
                 offset2 = str2.find(found,offset+1)
-#                print(offset2)
                 if str2.find(str1[length-offset2::]) == 0:
                     return True
-#    print(str1[length-offset::])
 
-#    elif str2.find() > -1:
-#        offset2 = str2.find(str1[length-offset::])
-#    else:
     return False
 
         
-#        
+#Tests:
+    
 #test_str1 = 'nicoleni'
 #test_str2 = 'colenini'
 #test_str3 = 'incoleni'
 #
 #
-#print(same_necklace(test_str1,test_str2))
-#print(same_necklace(test_str1,test_str3))
-
-print(same_necklace("aabaaaaabaab", "aabaabaabaaa")) #=> true
-print(same_necklace("abc", "cba")) #=> false
-print(same_necklace("xxyyy", "xxxyy")) #=> false
-print(same_necklace("xyxxz", "xxyxz")) #=> false
-print(same_necklace("x", "x")) #=> true
-print(same_necklace("x", "xx")) #=> false
-print(same_necklace("x", "")) #=> false
-print(same_necklace("", "")) #=> true
+#print(same_necklace(test_str1,test_str2)) # True
+#print(same_necklace(test_str1,test_str3)) # False
+#
+#print(same_necklace("nicole", "icolen")) # => true
+#print(same_necklace("nicole", "lenico")) # => true
+#print(same_necklace("nicole", "coneli")) # => false
+#print(same_necklace("aabaaaaabaab", "aabaabaabaaa")) #=> true
+#print(same_necklace("abc", "cba")) #=> false
+#print(same_necklace("xxyyy", "xxxyy")) #=> false
+#print(same_necklace("xyxxz", "xxyxz")) #=> false
+#print(same_necklace("x", "x")) #=> true
+#print(same_necklace("x", "xx")) #=> false
+#print(same_necklace("x", "")) #=> false
+#print(same_necklace("", "")) #=> true
