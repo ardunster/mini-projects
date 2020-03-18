@@ -25,51 +25,7 @@ Write a function that returns whether two strings describe the same necklace.
 '''
 
 
-# Steps: 1: Verify that the set of letters is the same. Otherwise obviously
-# there is no match, so easy elimination. 2: Inspect for conditions in premise.
-# Slicing or rewriting to multiple strings/tuples to check for at least one 
-# equivalency?
-
 from collections import Counter, defaultdict
-#
-#def same_necklace(str1,str2):
-#    '''
-#    Verify if two strings contain the same letters in the same order, 
-#    regardless of starting position. Input: two strings
-#    '''
-#    length = len(str1)
-#    
-#    #check obvious mismatches and matches
-#    if str1 == str2:
-#        return True
-#    elif set(str1) != set(str2) or len(str1) != len(str2):
-#        return False
-#    else:
-#        counts_str1 = Counter(str1)
-#        counts_str2 = Counter(str2)
-##        print(counts_str1,counts_str2)
-#        if counts_str1 != counts_str2:
-#            return False
-#        #try to match smallest common string
-#        for i in range(-1,-length-1,-1):
-#            if str2.find(str1[0:i]) > -1:
-#                offset = str2.find(str1[0:i])
-#                found = str1[0:i]
-#                count = str2.count(found)
-#                break
-#        
-#        
-#        if str2.find(str1[length-offset::]) == 0:
-#            return True
-#        #check for false negatives if multiple instances of smallest common string
-#        elif count > 1 and found:
-#            for i in range(count):
-#                offset2 = str2.find(found,offset+1)
-#                if str2.find(str1[length-offset2::]) == 0:
-#                    return True
-#
-#    return False
-
 
 
 
@@ -92,6 +48,7 @@ def same_necklace(str1,str2):
         
     return False
         
+
 #Tests:
 #    
 #test_str1 = 'nicoleni'
@@ -125,9 +82,6 @@ def same_necklace(str1,str2):
 with open("enable1.txt", "r") as f:
     enable1 = f.read().splitlines() 
 
-
-#enable1 = enable1[0:200]
-
 d = defaultdict(list)
 
 for i in enable1:
@@ -144,61 +98,5 @@ for k,v in d.items():
                     m[i].append(j)
 
 for k,v in m.items():
-    if len(v) > 1:
+    if len(v) >= 3:
         print(k,v)
-
-##    
-##
-##
-##
-##print(len(enable1))
-##
-##
-#
-#enable1_necklace = {}
-#
-#for i in enable1:
-#    for j in enable1:
-#        if same_necklace(i,j) and i != j:
-#            print(i,j)
-#            if i in enable1_necklace.keys():
-#                enable1_necklace[i] += 1
-#            else:
-#                enable1_necklace[i] = 1
-#            
-#    print(enable1_necklace)
-
-#enable1 = enable1[0:20]
-
-
-
-# Sort by length.
-
-#enable1_dict = {}
-#
-#for i in range(len(enable1)): 
-#    if len(enable1[i]) in enable1_dict.keys():
-#        enable1_dict[(len(enable1[i]))].append(enable1[i])
-#    else:
-#        enable1_dict[(len(enable1[i]))] = [enable1[i]]
-
-
-
-    
-#
-#matches = {}
-#
-#for k,v in enable1_dict.items():
-#    for i in v:
-#        for j in v:
-#            if same_necklace(i,j) and i != j:
-#                if k in matches.keys():
-#                    matches[k].append(i)
-#                else:
-#                    matches[k] = [i]
-        
-
-
-
-
-
