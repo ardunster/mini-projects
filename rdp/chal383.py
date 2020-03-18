@@ -30,7 +30,7 @@ Write a function that returns whether two strings describe the same necklace.
 # Slicing or rewriting to multiple strings/tuples to check for at least one 
 # equivalency?
 
-from collections import Counter
+from collections import Counter, defaultdict
 #
 #def same_necklace(str1,str2):
 #    '''
@@ -124,6 +124,29 @@ def same_necklace(str1,str2):
 
 with open("enable1.txt", "r") as f:
     enable1 = f.read().splitlines() 
+
+
+#enable1 = enable1[0:200]
+
+d = defaultdict(list)
+
+for i in enable1:
+    id = tuple(sorted(tuple(Counter(i).items())))
+    d[id].append(i)
+
+m = defaultdict(list)
+
+for k,v in d.items():
+    if len(v) >= 4:
+        for i in v:
+            for j in v:
+                if same_necklace(i,j) and i != j:
+                    m[i].append(j)
+
+for k,v in m.items():
+    if len(v) > 1:
+        print(k,v)
+
 ##    
 ##
 ##
@@ -144,5 +167,38 @@ with open("enable1.txt", "r") as f:
 #                enable1_necklace[i] = 1
 #            
 #    print(enable1_necklace)
+
+#enable1 = enable1[0:20]
+
+
+
+# Sort by length.
+
+#enable1_dict = {}
+#
+#for i in range(len(enable1)): 
+#    if len(enable1[i]) in enable1_dict.keys():
+#        enable1_dict[(len(enable1[i]))].append(enable1[i])
+#    else:
+#        enable1_dict[(len(enable1[i]))] = [enable1[i]]
+
+
+
     
+#
+#matches = {}
+#
+#for k,v in enable1_dict.items():
+#    for i in v:
+#        for j in v:
+#            if same_necklace(i,j) and i != j:
+#                if k in matches.keys():
+#                    matches[k].append(i)
+#                else:
+#                    matches[k] = [i]
+        
+
+
+
+
 
