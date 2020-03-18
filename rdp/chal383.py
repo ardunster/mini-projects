@@ -31,6 +31,47 @@ Write a function that returns whether two strings describe the same necklace.
 # equivalency?
 
 from collections import Counter
+#
+#def same_necklace(str1,str2):
+#    '''
+#    Verify if two strings contain the same letters in the same order, 
+#    regardless of starting position. Input: two strings
+#    '''
+#    length = len(str1)
+#    
+#    #check obvious mismatches and matches
+#    if str1 == str2:
+#        return True
+#    elif set(str1) != set(str2) or len(str1) != len(str2):
+#        return False
+#    else:
+#        counts_str1 = Counter(str1)
+#        counts_str2 = Counter(str2)
+##        print(counts_str1,counts_str2)
+#        if counts_str1 != counts_str2:
+#            return False
+#        #try to match smallest common string
+#        for i in range(-1,-length-1,-1):
+#            if str2.find(str1[0:i]) > -1:
+#                offset = str2.find(str1[0:i])
+#                found = str1[0:i]
+#                count = str2.count(found)
+#                break
+#        
+#        
+#        if str2.find(str1[length-offset::]) == 0:
+#            return True
+#        #check for false negatives if multiple instances of smallest common string
+#        elif count > 1 and found:
+#            for i in range(count):
+#                offset2 = str2.find(found,offset+1)
+#                if str2.find(str1[length-offset2::]) == 0:
+#                    return True
+#
+#    return False
+
+
+
 
 def same_necklace(str1,str2):
     '''
@@ -44,35 +85,15 @@ def same_necklace(str1,str2):
         return True
     elif set(str1) != set(str2) or len(str1) != len(str2):
         return False
-    else:
-        counts_str1 = Counter(str1)
-        counts_str2 = Counter(str2)
-#        print(counts_str1,counts_str2)
-        if counts_str1 != counts_str2:
-            return False
-        #try to match smallest common string
-        for i in range(-1,-length-1,-1):
-            if str2.find(str1[0:i]) > -1:
-                offset = str2.find(str1[0:i])
-                found = str1[0:i]
-                count = str2.count(found)
-                break
-        
-        
-        if str2.find(str1[length-offset::]) == 0:
+    
+    for i in range(length):
+        if str1 == (str2[i:] + str2[:i]):
             return True
-        #check for false negatives if multiple instances of smallest common string
-        elif count > 1 and found:
-            for i in range(count):
-                offset2 = str2.find(found,offset+1)
-                if str2.find(str1[length-offset2::]) == 0:
-                    return True
-
+        
     return False
-
         
 #Tests:
-    
+#    
 #test_str1 = 'nicoleni'
 #test_str2 = 'colenini'
 #test_str3 = 'incoleni'
@@ -92,37 +113,36 @@ def same_necklace(str1,str2):
 #print(same_necklace("x", "xx")) #=> false
 #print(same_necklace("x", "")) #=> false
 #print(same_necklace("", "")) #=> true
-
-print(same_necklace('abrades', 'sabered'))
+#
+#print(same_necklace('abrades', 'sabered'))
 
 
 # Bonus: identify the set of exactly 4 words in enable1.txt that describe the 
 # same necklace.
     
-#f = open("enable1.txt", "r")
-#enable1 = []
-#
-##enable1.append(f.readlines())
-###
-#for i in range(10):
-#    line = f.readline()
-#    enable1.append(line.strip())
-#
-#print(len(enable1))
-#
-#f.close()
 
-#with open("enable1.txt", "r") as f:
-#    enable1 = f.read().splitlines() 
-#    
+
+with open("enable1.txt", "r") as f:
+    enable1 = f.read().splitlines() 
+##    
+##
+##
+##
+##print(len(enable1))
+##
+##
 #
-#
-#
-#print(len(enable1))
-#
-#
+#enable1_necklace = {}
 #
 #for i in enable1:
 #    for j in enable1:
 #        if same_necklace(i,j) and i != j:
-##            print(i,j)
+#            print(i,j)
+#            if i in enable1_necklace.keys():
+#                enable1_necklace[i] += 1
+#            else:
+#                enable1_necklace[i] = 1
+#            
+#    print(enable1_necklace)
+    
+
