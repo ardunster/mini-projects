@@ -8,3 +8,5 @@ Rolled 2d16, resulting in [13, 15], total 28.
 Rolled 2d8, resulting in [3, 7], total 10.
 2020-03-16 20:19:39.317634
 Rolled 2d8, resulting in [3, 1], total 4.
+2020-03-19 17:03:03.932902
+Rolled 3d7, resulting in [5, 6, 6], total 17.

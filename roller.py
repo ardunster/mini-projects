@@ -5,9 +5,11 @@ Created on Wed Feb 19 16:34:53 2020
 @author: ardunster
 """
 
-#Dice roller script. For D&D and any other game requiring randomized rolls. 
+#Dice roller script. For D&D and any other game requiring randomized rolls.
 #Dice size are not limited to traditional dice. You can roll any die you want.
 
+import random
+import datetime
 
 print('Input desired dice roll in xdy format, ie, 1d6.')
 
@@ -27,12 +29,11 @@ dice_size = int(dice_input[d+1:])
 
 
 # Roll Dice
-import random
 
 roll = []
 
 for i in range(dice_qty):
-    roll.append(random.randrange(1,dice_size))
+    roll.append(random.randrange(1, dice_size))
 
 
 #Return results
@@ -45,13 +46,11 @@ print(f'Your total roll is {sum(roll)}.')
 
 
 #Log results with timestamp
-import datetime
 
 now = datetime.datetime.now()
 
-roll_log = open('roll_log.txt', 'a') 
+roll_log = open('roll_log.txt', 'a')
 
 roll_log.write(f'{now}\nRolled {dice_qty}d{dice_size}, resulting in {roll}, total {sum(roll)}.\n')
 
 roll_log.close()
-
