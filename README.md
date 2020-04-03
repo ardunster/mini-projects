@@ -30,3 +30,7 @@ Modifier syntax
 UI?
 
 Dice roll visualization. 3d dice! 
+
+04/03:
+
+Added the single player Blackjack game designed for the Complete Python Bootcamp Udemy course, including the game, an import file with the card art, and a handful of tests.
