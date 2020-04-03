@@ -28,12 +28,6 @@ Personal additional objectives:
 import random
 from cpb_blackjack_cardart import cardart
 import pickle
-#
-#variable = input('Some input here: ')
-#
-#clear_output(wait=True)
-#
-#print(variable)
 
 class Deck():
     '''
@@ -54,9 +48,6 @@ class Deck():
     def shuffle(self):
         self.shuffled = list(self.fresh)
         random.shuffle(self.shuffled)
-        
-    def remaining(self):
-        return self.shuffled
         
     def deal(self):
         return self.shuffled.pop()
@@ -182,7 +173,7 @@ def player_select():
         elif str.upper(choice[0]) == 'D':
             lst = [str(char) for char in choice if char.isdigit()]
             if not lst:
-                print('Invalid input, enter a file selection with D.')
+                print('Invalid input, enter a file number selection with D.')
                 continue
             index = ''
             for i in lst:
@@ -209,7 +200,7 @@ def player_select():
 
 def save():
     '''
-    Saves current player info after discards hand data.
+    Saves current player info after discarding hand data.
     '''
     player[current].discard()
     dealer.discard()
@@ -382,6 +373,7 @@ def dealer_move():
         if check_value(player[current].hand) == check_value(dealer.hand) == 21:
             print('Draw! No win or loss. Bet returned.')
             player[current].balance += bet
+            save()
             return False
         elif check_value(dealer.hand) == 21:
             print('Dealer Blackjack! Sorry, you lose.')
@@ -394,7 +386,6 @@ def dealer_move():
             print('Congratulations, {p}, your winnings: ${b} + ${w} = ${t}!'.format(p=player[current].name,b=bet,w=winnings,t=(bet + winnings)))
             player[current].win((winnings + bet))
             save()
-            natural = False
             return False
         elif 21 > check_value(dealer.hand) > check_value(player[current].hand):
             print('Dealer wins with {}! Sorry, you lose.'.format(check_value(dealer.hand)))
@@ -413,12 +404,6 @@ def check_win(hand):
     else:
         return False
 
-
-def check_reshuffle():
-    if len(deck.shuffled) <= 13:
-        return True
-    else:
-        return False
 
 def draw_welcome():
     '''Draws the welcome screen with a random selection of 6 cards'''
@@ -474,74 +459,12 @@ ready = False
 natural = False
 
 
-#hand = ['AH', 'JD']
-
-#player_select()
-
-#player_setup = new_player_setup()
-
-#player.append(Player(*new_player_setup()))
-#player.append(Player('George',345))
-
-#print(player[0])
-
-#print(random.choices(deck.fresh, k = 4))
-
-#draw_welcome()
-
-##
-#player[current].discard()
-#initial_deal(deck,player[current],dealer)
-##print(player[current].hand)
-##print(dealer.hand)
-##print(dealer.visible_hand)
-#draw_board(dealer.visible_hand,player[current].hand)
-##player[current].rec_deal(deck.deal())
-##draw_board(dealer.visible_hand,player[current].hand)
-#player[current].hand = ['JH','7D']
-#
-#dealer_turn()
-
-
-#print(player.balance)
-#bet = player.place_bet()
-#print(player.balance)
-#print(bet)
-
-#for i in range(6):
-#    print(draw_card(i,hand),draw_card(i,hand))
-
-#print(check_value(hand))
-#
-#for i in range(2,11):
-#    hand.append(str(i) + 'H')
-
-#player.rec_deal(deck.deal())
-#player.rec_deal(deck.deal())
-#player.rec_deal(deck.deal())
-
-#
-#print(dealer.hand)
-#
-#dealer.rec_deal('AS')
-#
-#print(dealer.hand, dealer.visible_hand)
-#
-#dealer.rec_deal('2S')
-#
-#print(dealer.hand, dealer.visible_hand)
-#'''
-
 if __name__ == '__main__':
     draw_welcome()
     print('Select a player profile:\n\n')
     player_select()
     draw_board(dealer.visible_hand,player[current].hand)
-#    are_you_ready = input('Are you ready to play? ')
-#    if are_you_ready[0].lower() == 'y' or are_you_ready.lower() == 'ready':
     ready = True
-#    else:
-#        print('Thanks for playing!')
     while ready:
         player_turn = True
         while player_turn:
@@ -576,13 +499,9 @@ if __name__ == '__main__':
         dealer_turn = True
         while dealer_turn and not player_lost:
             dealer_turn = dealer_move()
-        
+    
         
         press_enter()
-        
-        
-        
-        
         
         
         bet = 0
@@ -596,56 +515,3 @@ if __name__ == '__main__':
             print('Thanks for playing! Re-run program to play again or with a different profile.')
             break
     
-#'''
-'''
-game
-
-welcome screen
-draw staggered cards? range 8, some i, some i+/-2 .. ? 
-if i == 0-1, draw i
-if i == 2-6, draw i, draw i-2
-if i == 6-8, draw i-2
-, options: new player, player select (IF players exist)
-
-if new player, auto select generated player
-
-if select player, display options
-
-or:
-    
-welcome screen, press whatever to begin. 
-
-retrieves players from file.
-
-displays list of players, select index, or type new for new player, or del + index to delete player
-
-check for strings 'new' and 'del x', check if digit, if digit check if in range len list
-
-if player loses all money, ie  balance == 0 and dealer just won, player at that index should be deleted 
-if player balance goes over 99,999, set bal to 99999
-
-player places bet
-
-initial deal
-
-check for natural (check for ace?): both natural, draw (bet returned to player). if only player has a natural, 
-he gets bet + 1.5x bet. if only dealer has natural, display dealer's hand, player loses bet.
-
-player option: hit or stand:
-
-if hit, player receives another card.
-check value: over 21 = lose (bust), bet forfeit
-
-if 21 or under, and player chooses stand, then dealer's turn
-
-per assignment, if dealer is under 21 and under player, dealer will hit. 
-(pause for input? how to get input of just pressing enter, etc?)
-if dealer = player = 21, player receives original bet.
-if player did not bust and dealer busts, player receives 2x original bet.
-if dealer is > player <= 21, dealer wins, player loses bet.
-
-save balance, win/loss to player list
-
-Play again? (play again, player select, exit)
-
-'''
