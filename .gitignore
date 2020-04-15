@@ -123,3 +123,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#mini-projects specific files
+cpb_blackjack_players.data
+goldprices.xlsx
+test.xlsx
+extractgoldprices_goodtest.py
