@@ -39,3 +39,7 @@ Dice roll visualization. 3d dice!
 04/03:
 
 Added the single player Blackjack game designed for the Complete Python Bootcamp Udemy course, including the game, an import file with the card art, and a handful of tests.
+
+04/14:
+
+Added the first stage of the final project from Complete Python Bootcamp Udemy course, as well as a couple files for another project I am working on for fetching the current prices of gold and silver and running some calculations based on price history.
