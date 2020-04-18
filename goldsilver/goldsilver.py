@@ -15,6 +15,10 @@ Created on Fri Apr 10 18:43:45 2020
      587. Besides this, you won’t need to use login() or encrypt the 
      communication using SSL/TLS.
 
+london fix price (what my chart uses) is set pm at 15:00 GMT. However,
+site I use to update doesn't list this number until next day. 
+
+gold: 0.975 < > 1.225
 '''
 
 

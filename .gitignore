@@ -125,7 +125,11 @@ dmypy.json
 .pyre/
 
 #mini-projects specific files
-cpb_blackjack_players.data
-goldprices.xlsx
-test.xlsx
-extractgoldprices_goodtest.py
+**/cpb_blackjack_players.data
+**/goldprices.xlsx
+**/goldprices copy.xlsx
+**/test.xlsx
+**/extractgoldprices_goodtest.py
+**/silver2018.txt
+**/silver2019.txt
+**/silverprices.xlsx
