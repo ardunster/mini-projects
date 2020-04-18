@@ -22,6 +22,7 @@ from bs4 import BeautifulSoup as bs
 import requests
 import openpyxl as xl
 from os import path
+import datetime
 
 
 '''
@@ -102,8 +103,10 @@ prices_mr = prices_ws.max_row
 prices_mc = prices_ws.max_column
 
 
-def tuples_to_xlsx(list):
-
+def tuples_to_xlsx(lst):
+    '''
+    Input: list of tuples of (date as YYYY-MM-DD, silver price as float)
+    '''
     
     global add_row
     global count
@@ -111,12 +114,12 @@ def tuples_to_xlsx(list):
 
     count = 1
     
-    for i in range(len(list)):
-        if not list[i][1] == '-':
-            w_date = list[i][0]
+    for i in range(len(lst)):
+        if not lst[i][1] == '-':
+            w_date = datetime.datetime.strptime(lst[i][0], '%Y-%m-%d')
             prices_ws.cell(row=add_row, column=1).value = w_date
             prices_ws.cell(row=add_row, column=1).number_format = 'yy/mm/dd'
-            prices_ws.cell(row=add_row, column=2).value = float(list[i][1])
+            prices_ws.cell(row=add_row, column=2).value = float(lst[i][1])
             prices_ws.cell(row=add_row, column=2).number_format = '#,##0.00'
             if count > 1:
                 prices_ws.cell(row=add_row, column=3).value = '=(B{}-B{})'.format(add_row,add_row-1)
