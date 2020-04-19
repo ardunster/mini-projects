@@ -84,20 +84,20 @@ def load_xlsx():
     global silver_ws
     global silver_mr
     
-    prices_gold = 'goldprices.xlsx'
+#    prices_gold = 'goldprices.xlsx'
     gold_wb = xl.load_workbook(prices_gold)
     gold_ws = gold_wb.worksheets[0]
     gold_mr = gold_ws.max_row
     
-    prices_silver = 'silverprices.xlsx'
+#    prices_silver = 'silverprices.xlsx'
     silver_wb = xl.load_workbook(prices_silver)
     silver_ws = silver_wb.worksheets[0]
     silver_mr = silver_ws.max_row
     
     if gold_mr < 202:
-        raise TooFewLines('Too few lines in goldprices.xlsx to compute 200dma, check data.')
+        raise TooFewLines('Too few lines in {} to compute 200dma, check data.'.format(prices_gold))
     elif silver_mr < 202:
-        raise TooFewLines('Too few lines in silverprices.xlsx to compute 200dma, check data.')
+        raise TooFewLines('Too few lines in {} to compute 200dma, check data.'.format(prices_silver))
 
 
 
@@ -160,13 +160,17 @@ def update():
         w_date_silver = silver_ws.cell(row=silver_mr, column=1).value.date()
         ind_gold = ''
         ind_silver = ''
-        for tup in range(len(current)):
-            if current[tup][0] == w_date_gold:
-                ind_gold = (tup - 1)
-            if current[tup][0] == w_date_silver:
-                ind_silver = (tup - 1)
-            if ind_gold and ind_silver:
-                return ind_gold, ind_silver
+        while ind_gold == '' and ind_silver == '':
+            for tup in range(len(current)):
+                if current[tup][0] == w_date_gold:
+                    ind_gold = (tup - 1)
+                elif current[tup][0].timetuple().tm_mon == 1 and len(current) == 1:
+                    ind_gold = tup
+                if current[tup][0] == w_date_silver:
+                    ind_silver = (tup - 1)
+                elif current[tup][0].timetuple().tm_mon == 1 and len(current) == 1:
+                    ind_silver = tup
+        return ind_gold, ind_silver
             
     def add_row(goldorsilver,add_row,w_date,w_value):
         if goldorsilver == 'gold':
@@ -185,7 +189,8 @@ def update():
         add_ws.cell(row=add_row, column=5).number_format = '#,##0.00'
 
                 
-    gold_silver_index = find_index()
+    gold_silver_index = (find_index())
+    
     
     # Gold
     g_add_row = gold_mr + 1        
@@ -203,10 +208,31 @@ def update():
         if not current[i][3] == '-':
             add_row('silver',s_add_row,current[i][0],current[i][3])
             s_add_row += 1
+            
+    gold_wb.save(prices_gold)
+    silver_wb.save(prices_silver)
+
+def calc_dma():
+    '''
+    Retrieves and calculates the data for 200dma and relative gold and relative 
+    silver values. This is also calculated in the xlsx file if loaded in a client,
+    but openpyxl will not evaluate formulas so must be separately calculated in
+    the script for alerts, etc.
+    '''
+    
+    # Gold
+    
+    pass
+    
+    
+#    return gold_200dma, gold_ratio, silver_200dma, silver_ratio
 
 
 
-if not path.exists('goldprices.xlsx') or not path.exists('silverprices.xlsx'):
+prices_gold = 'goldprices.xlsx'
+prices_silver = 'silverprices.xlsx'
+
+if not path.exists(prices_gold) or not path.exists(prices_silver):
     raise MissingFiles('Error, missing data. Please ensure goldprices.xlsx and silverprices.xlsx have been generated appropriately.')
 
 if __name__ == '__main__':
@@ -217,15 +243,18 @@ if __name__ == '__main__':
     load_xlsx()
     gold_mr = verify_mr('gold')
     silver_mr = verify_mr('silver')
-        
+    update()
+    
+    
+    
+    
 
 '''
-Next steps:
-- fetch most recent row in each
-- find and index in current (data error if na? edge case beginning of year?)
-- append data after that into xlsx
+next steps
 - check for relative ratios in alert zones
+- produce a chart graphic, dated?
 - produce an alert of some kind. email or?
+- script to run daily at x time or on startup if not run
 '''
 
 
