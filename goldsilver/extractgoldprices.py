@@ -70,7 +70,7 @@ for i in range(first_row,last_row):
         prices_ws.cell(row=add_row, column=3).value = '=(B{}-B{})'.format(add_row,add_row-1)
         prices_ws.cell(row=add_row, column=3).number_format = '#,##0.00'
     if count >= 200:
-        prices_ws.cell(row=add_row, column=4).value = '=AVERAGE(B{}:B{})'.format(add_row,add_row-200)
+        prices_ws.cell(row=add_row, column=4).value = '=AVERAGE(B{}:B{})'.format(add_row,add_row-199)
         prices_ws.cell(row=add_row, column=4).number_format = '#,##0.00'
         prices_ws.cell(row=add_row, column=5).value = '=(B{}/D{})'.format(add_row, add_row)
         prices_ws.cell(row=add_row, column=5).number_format = '#,##0.00'

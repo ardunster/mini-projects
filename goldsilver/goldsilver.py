@@ -16,6 +16,7 @@ london fix price (what my chart uses) is set pm at 15:00 GMT. However,
 site I use to update doesn't list this number until next day. 
 
 gold: 0.975 < > 1.225
+
 '''
 
 '''
@@ -183,7 +184,7 @@ def update():
         add_ws.cell(row=add_row, column=2).number_format = '#,##0.00'
         add_ws.cell(row=add_row, column=3).value = '=(B{}-B{})'.format(add_row,add_row-1)
         add_ws.cell(row=add_row, column=3).number_format = '#,##0.00'
-        add_ws.cell(row=add_row, column=4).value = '=AVERAGE(B{}:B{})'.format(add_row,add_row-200)
+        add_ws.cell(row=add_row, column=4).value = '=AVERAGE(B{}:B{})'.format(add_row,add_row-199)
         add_ws.cell(row=add_row, column=4).number_format = '#,##0.00'
         add_ws.cell(row=add_row, column=5).value = '=(B{}/D{})'.format(add_row, add_row)
         add_ws.cell(row=add_row, column=5).number_format = '#,##0.00'
@@ -218,19 +219,70 @@ def calc_dma():
     silver values. This is also calculated in the xlsx file if loaded in a client,
     but openpyxl will not evaluate formulas so must be separately calculated in
     the script for alerts, etc.
+    Output: tuple of (gold_200dma, gold_ratio, silver_200dma, silver_ratio)
     '''
     
     # Gold
+    gold_200d = []
+    for i in range(200):
+        row = gold_mr - i
+        gold_200d.append(gold_ws.cell(row=row, column=2).value)
+    gold_200dma = (sum(gold_200d) / len(gold_200d))
+    gold_ratio = (gold_ws.cell(row=gold_mr, column=2).value)/gold_200dma
     
-    pass
+    # Silver
+    silver_200d = []
+    for i in range(200):
+        row = silver_mr - i
+        silver_200d.append(silver_ws.cell(row=row, column=2).value)
+    silver_200dma = (sum(silver_200d) / len(silver_200d))
+    silver_ratio = (silver_ws.cell(row=silver_mr, column=2).value)/silver_200dma
     
-    
-#    return gold_200dma, gold_ratio, silver_200dma, silver_ratio
+    return gold_200dma, gold_ratio, silver_200dma, silver_ratio
 
+def check_alerts(dmas):
+    '''
+    Checks for high and low R-Gold and R-Silver according to variables set globally.
+    Input: tuple of (gold_200dma, gold_ratio, silver_200dma, silver_ratio)
+    Output: tuple of (number of alerts, string of gold alert, string of silver alert)
+    '''
+    alerts = 0
+    # Gold
+    if  dmas[1] > rgold_low_alert and dmas[1] < rgold_high_alert:
+        gold_alerts = 'No Gold alerts. Gold 200dma: ${:.2f}  Relative Gold: {:.2f}'.format(dmas[0],dmas[1])
+    elif dmas[1] <= rgold_low_alert:
+        gold_alerts = 'LOW Relative Gold. Check for buying conditions! Gold 200dma: ${:.2f}  Relative Gold: {:.2f}'.format(dmas[0],dmas[1])
+        alerts += 1
+    elif dmas[1] >= rgold_high_alert:
+        gold_alerts = 'HIGH Relative Gold. Check for selling conditions! Gold 200dma: ${:.2f}  Relative Gold: {:.2f}'.format(dmas[0],dmas[1])
+        alerts += 1
+    # Silver
+    if  dmas[3] > rsilver_low_alert and dmas[3] < rsilver_high_alert:
+        silver_alerts = 'No Silver alerts. Silver 200dma: ${:.2f}  Relative Silver: {:.2f}'.format(dmas[2],dmas[3])
+    elif dmas[3] <= rsilver_low_alert:
+        silver_alerts = 'LOW Relative Silver. Check for buying conditions! Silver 200dma: ${:.2f}  Relative Silver: {:.2f}'.format(dmas[2],dmas[3])
+        alerts += 1
+    elif dmas[3] >= rsilver_high_alert:
+        silver_alerts = 'HIGH Relative Silver. Check for selling conditions! Silver 200dma: ${:.2f}  Relative Silver: {:.2f}'.format(dmas[2],dmas[3])
+        alerts += 1
+    
+    return alerts, gold_alerts, silver_alerts
 
+def log_alerts():
+    with open('goldsilver_alerts_log.txt', 'a') as alerts_log:
+        alerts_log.write(str(datetime.datetime.now()) + '\n\n')
+        alerts_log.write('Alerts: {}'.format(alerts[0]) + '\n')
+        alerts_log.write(alerts[1] + '\n')
+        alerts_log.write(alerts[2] + '\n\n')
 
 prices_gold = 'goldprices.xlsx'
 prices_silver = 'silverprices.xlsx'
+rgold_low_alert = 0.975
+rgold_high_alert = 1.225
+rsilver_low_alert = 0.8
+rsilver_high_alert = 1.4
+
+
 
 if not path.exists(prices_gold) or not path.exists(prices_silver):
     raise MissingFiles('Error, missing data. Please ensure goldprices.xlsx and silverprices.xlsx have been generated appropriately.')
@@ -244,15 +296,19 @@ if __name__ == '__main__':
     gold_mr = verify_mr('gold')
     silver_mr = verify_mr('silver')
     update()
-    
-    
+    dmas = calc_dma()
+    alerts = check_alerts(dmas)
+    log_alerts()
+    #file to text log
+    if alerts[0] > 0:
+        #make an alert
+        pass
     
     
 
 '''
 next steps
-- check for relative ratios in alert zones
-- produce a chart graphic, dated?
+
 - produce an alert of some kind. email or?
 - script to run daily at x time or on startup if not run
 '''
