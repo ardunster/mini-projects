@@ -42,6 +42,8 @@ server.sendmail(sender_email, receiver_email, message)
 # Imports
 
 import smtplib
+import re
+import importlib
 from os import path
 
 
@@ -82,6 +84,8 @@ def run_config(user_input=False):
     localhost default.
     '''
     
+#    global cfg
+    
     def write_config(localhost=True, smtp_server='localhost', smtp_port=1025, sender_email='bogus@bogus.com', receiver_email='your@bogus.com', username='', password=''):
         '''Writes localhost config, default values localhost'''
         with open('send_email_config.py', 'w') as config_file:
@@ -100,7 +104,7 @@ def run_config(user_input=False):
     elif user_input == True:
         # Get base values from current config:
         select_input = ''
-        lh_input = cfg['localhost']
+        lh_input = cfg.config_dict['localhost']
         serv_input = cfg['smtp_server']
         port_input = cfg['smtp_port']
         sender_input = cfg['sender_email']
@@ -111,7 +115,7 @@ def run_config(user_input=False):
         while select_input == '':
             print('Current configuration is: {}'.format(cfg))
             select_input = input('Enter a selection to modify, default to return to default localhost, or end to quit: ')
-#            if select_input in cfg:
+            
             if select_input == 'localhost':
                 lh_input = ''
                 while not lh_input == True and not lh_input == False:
@@ -126,9 +130,11 @@ def run_config(user_input=False):
                     serv_input = 'localhost'
                     port_input = 1025
                 select_input = ''
+                
             elif select_input.lower() == 'smtp_server' or 'server' in select_input.lower():
                 serv_input = input('Enter a new SMTP server: ')
                 select_input = ''
+                
             elif select_input.lower() == 'smtp_port' or 'port' in select_input.lower():
                 port_input = ''
                 while not port_input.isdigit():
@@ -139,20 +145,50 @@ def run_config(user_input=False):
                 select_input = ''
                 
             elif select_input.lower() == 'sender_email' or 'sender' in select_input.lower():
-                # NEXT 
-                pass
+                sender_input = ''
+                while sender_input == '':
+                    sender_input = input('Enter sender email address: ')
+                    if bool(re.search('\S+@\S+\.\S+', sender_input)) == False:
+                        print('Invalid email address.')
+                        sender_input = ''
+                select_input = ''
+                
+            elif select_input.lower() == 'receiver_email' or 'rec' in select_input.lower():
+                rec_input = ''
+                while rec_input == '':
+                    rec_input = input('Enter receiver email address: ')
+                    if bool(re.search('\S+@\S+\.\S+', rec_input)) == False:
+                        print('Invalid email address.')
+                        sender_input = ''
+                select_input = ''
+                
+            elif select_input.lower() == 'username' or 'user' in select_input.lower():
+                username_input = input('Enter username: ')
+                select_input = ''
+                
+            elif select_input.lower() == 'password' or 'pass' in select_input.lower():
+                password_input = input('Enter your password: ')
+                select_input = ''
                 
             elif select_input.lower() == 'default':
                 print('Restoring default settings.')
                 write_config()
-            elif select_input.lower() in ('end','quit','exit'):
+                
+            elif select_input.lower() in ('end','quit','exit','done'):
                 print('Finalizing setup.')
                 break
+            
             else:
                 print('\'{}\': invalid selection.\n'.format(select_input))
                 select_input = ''
-            print(lh_input,serv_input,port_input,sender_input,rec_input,username_input,password_input)
-#                input('Enter a new value for {}: '.format(select_input))
+                
+            print()
+            write_config(lh_input,serv_input,port_input,sender_input,rec_input,username_input,password_input)
+            importlib.reload(send_email_config)
+
+
+
+
 def send_alert(alerts):
     '''
     Takes alerts from goldsilver.py and sends email as specified in config.
@@ -178,7 +214,8 @@ def send_alert(alerts):
 if not path.exists('send_email_config.py'):
     run_config()
     
-from send_email_config import config_dict as cfg
+#from send_email_config import config_dict as cfg
+import send_email_config as cfg
 
 
 #
