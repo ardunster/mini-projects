@@ -7,33 +7,13 @@ Created on Tue Apr 21 15:36:30 2020
 """
 
 '''
-Email test code:
+Configurable email setup for alerts. By default sends an alert via localhost,
+which would need to be loaded and monitored in a terminal window, using command:
+sudo python -m smtpd -c DebuggingServer -n localhost:1025
+or something similar depending on your exact system and setup.
 
-but if you’re using a local debugging server, just make sure to use 
-localhost as your SMTP server and use port 1025 rather than port 465 or
-587. Besides this, you won’t need to use login() or encrypt the 
-communication using SSL/TLS.
-
-
-
-
-port = 1025
-smtp_server = 'localhost'
-
-server = smtplib.SMTP(smtp_server,port)
-
-sender_email = 'bogus@bogus.com'
-
-#sender_email = "my@gmail.com"
-receiver_email = "your@gmail.com"
-message = """\
-Subject: Hi there
-
-This message is sent from Python."""
-
-# Send email here
-
-server.sendmail(sender_email, receiver_email, message)
+Running this script by itself (rather than calling it from another script) will
+run the config setup 
 
 '''
 
@@ -47,35 +27,7 @@ import importlib
 from os import path
 
 
-
 # Functions
-
-#def get_config():
-#    '''
-#    Retrieves and assigns globals from config file
-#    '''
-#    
-#    global server
-#    global sender_email
-#    global receiver_email
-#    global username
-#    global password
-#    
-#    with open(config, 'r') as config_file:
-#        config_list = [i.strip() for i in config_file if not i[0] == '#' and not i == '\n']
-#    
-#    config_dict = {}
-#    
-#    for i in config_list:
-#        key,val = i.split(' = ')
-#        config_dict.update({key:val})
-#
-#            
-#    server = smtplib.SMTP(smtp_server,port)
-#    
-#    return config_dict
-
-    
 
 def run_config(user_input=False):
     '''
@@ -84,7 +36,7 @@ def run_config(user_input=False):
     localhost default.
     '''
     
-#    global cfg
+    global cfg
     
     def write_config(localhost=True, smtp_server='localhost', smtp_port=1025, sender_email='bogus@bogus.com', receiver_email='your@bogus.com', username='', password=''):
         '''Writes localhost config, default values localhost'''
@@ -101,18 +53,23 @@ def run_config(user_input=False):
             
     if user_input == False:
         write_config()
+        
     elif user_input == True:
-        # Get base values from current config:
         select_input = ''
-        lh_input = cfg['localhost']
-        serv_input = cfg['smtp_server']
-        port_input = cfg['smtp_port']
-        sender_input = cfg['sender_email']
-        rec_input = cfg['receiver_email']
-        username_input = cfg['username']
-        password_input = cfg['password']
         # Input:
         while select_input == '':
+            
+            # Get base values from current config:
+            importlib.reload(send_email_config)
+            cfg = send_email_config.config_dict
+            lh_input = cfg['localhost']
+            serv_input = cfg['smtp_server']
+            port_input = cfg['smtp_port']
+            sender_input = cfg['sender_email']
+            rec_input = cfg['receiver_email']
+            username_input = cfg['username']
+            password_input = cfg['password']
+            
             print('Current configuration is: {}'.format(cfg))
             select_input = input('Enter a selection to modify, default to return to default localhost, or end to quit: ')
             
@@ -171,20 +128,24 @@ def run_config(user_input=False):
                 select_input = ''
                 
             elif select_input.lower() == 'default':
-                print('Restoring default settings.')
+                print('\nRestoring default settings.\n')
+                select_input = ''
                 write_config()
+                continue
                 
             elif select_input.lower() in ('end','quit','exit','done'):
-                print('Finalizing setup.')
+                print('\nEnd config.')
                 break
             
             else:
-                print('\'{}\': invalid selection.\n'.format(select_input))
+                print('\n\'{}\': invalid selection.'.format(select_input))
                 select_input = ''
-                
+            
+            if not serv_input == 'localhost':
+                lh_input == False
+            
             print()
             write_config(lh_input,serv_input,port_input,sender_input,rec_input,username_input,password_input)
-            importlib.reload(send_email_config)
 
 
 
@@ -192,48 +153,41 @@ def run_config(user_input=False):
 def send_alert(alerts):
     '''
     Takes alerts from goldsilver.py and sends email as specified in config.
+    Input: tuple of (int quantity of alerts, string of gold message, string of silver message)
     '''
+    server = smtplib.SMTP(cfg['smtp_server'],cfg['smtp_port'])
     
-    server.sendmail(sender_email, receiver_email, message)
-
-
-# Globals
-
-#config = 'send_email_config.py'
-
-#smtp_server = 'localhost'
-#port = 1025
-#
-#sender_email = 'bogus@bogus.com'
-#receiver_email = 'your@gmail.com'
-#
-#server = smtplib.SMTP(smtp_server,port)
+    message = '''\
+    Subject: {a} Gold/Silver Alerts
+    
+    You have {a} alerts from goldsilver.py.
+    
+    {g}
+    
+    {s}
+    '''.format(a=alerts[0], g=alerts[1], s=alerts[2])
+    
+    server.sendmail(cfg['sender_email'], cfg['receiver_email'], message)
     
 # Config 
 
 if not path.exists('send_email_config.py'):
     run_config()
     
-from send_email_config import config_dict as cfg
+import send_email_config
+
+cfg = send_email_config.config_dict
 
 
 
-#
-#
-#smtp_server = ''
-#port = 0
-#
-#sender_email = ''
-#receiver_email = ''
-#
-#server = smtplib.SMTP(smtp_server,port)
-#    
-#
-#        
-        
 
 if __name__ == '__main__':
-#    pass
-    run_config(user_input=True)
-    
+#    run_config(user_input=True)
+    pass
+
+# experimental test data - delete later
+test_alerts = (0, 'No Gold alerts. Gold 200dma: $1524.63  Relative Gold: 1.11', 'No Silver alerts. Silver 200dma: $16.93  Relative Silver: 0.89')
+send_alert(test_alerts)
+
+
     
