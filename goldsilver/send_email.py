@@ -104,7 +104,7 @@ def run_config(user_input=False):
     elif user_input == True:
         # Get base values from current config:
         select_input = ''
-        lh_input = cfg.config_dict['localhost']
+        lh_input = cfg['localhost']
         serv_input = cfg['smtp_server']
         port_input = cfg['smtp_port']
         sender_input = cfg['sender_email']
@@ -214,8 +214,8 @@ def send_alert(alerts):
 if not path.exists('send_email_config.py'):
     run_config()
     
-#from send_email_config import config_dict as cfg
-import send_email_config as cfg
+from send_email_config import config_dict as cfg
+
 
 
 #
