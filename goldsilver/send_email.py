@@ -81,18 +81,78 @@ def run_config(user_input=False):
     'True' will run user input for writing config file; 'False' will generate 
     localhost default.
     '''
-    if user_input == False:
+    
+    def write_config(localhost=True, smtp_server='localhost', smtp_port=1025, sender_email='bogus@bogus.com', receiver_email='your@bogus.com', username='', password=''):
+        '''Writes localhost config, default values localhost'''
         with open('send_email_config.py', 'w') as config_file:
             config_file.write('# Email Config\n\n')
-            config_file.write('config_dict = { \'localhost\' : True, \n')
-            config_file.write('               \'smtp_server\' : \'localhost\',\n')
-            config_file.write('               \'smtp_port\' : 1025,\n')
-            config_file.write('               \'sender_email\' : \'bogus@bogus.com\',\n')
-            config_file.write('               \'receiver_email\' : \'your@bogus.com\',\n')
-            config_file.write('               \'username\' : \'\',\n')
-            config_file.write('               \'password\' : \'\'\n')
+            config_file.write('config_dict = { \'localhost\' : ' + str(localhost) + ', \n')
+            config_file.write('               \'smtp_server\' : \'' + str(smtp_server) + '\',\n')
+            config_file.write('               \'smtp_port\' : ' + str(smtp_port) + ',\n')
+            config_file.write('               \'sender_email\' : \'' + str(sender_email) + '\',\n')
+            config_file.write('               \'receiver_email\' : \'' + str(receiver_email) + '\',\n')
+            config_file.write('               \'username\' : \'' + str(username) + '\',\n')
+            config_file.write('               \'password\' : \'' + str(password) + '\'\n')
             config_file.write('               }')
-
+            
+    if user_input == False:
+        write_config()
+    elif user_input == True:
+        # Get base values from current config:
+        select_input = ''
+        lh_input = cfg['localhost']
+        serv_input = cfg['smtp_server']
+        port_input = cfg['smtp_port']
+        sender_input = cfg['sender_email']
+        rec_input = cfg['receiver_email']
+        username_input = cfg['username']
+        password_input = cfg['password']
+        # Input:
+        while select_input == '':
+            print('Current configuration is: {}'.format(cfg))
+            select_input = input('Enter a selection to modify, default to return to default localhost, or end to quit: ')
+#            if select_input in cfg:
+            if select_input == 'localhost':
+                lh_input = ''
+                while not lh_input == True and not lh_input == False:
+                    lh_input = input('Reset server and port to default (localhost)? True or False: ')
+                    if lh_input.lower() == 'true' or lh_input[0].lower() == 'y':
+                        lh_input = True
+                    elif lh_input.lower() == 'false' or lh_input[0].lower() == 'n':
+                        lh_input = False
+                    else:
+                        print('Invalid input.')
+                if lh_input == True:
+                    serv_input = 'localhost'
+                    port_input = 1025
+                select_input = ''
+            elif select_input.lower() == 'smtp_server' or 'server' in select_input.lower():
+                serv_input = input('Enter a new SMTP server: ')
+                select_input = ''
+            elif select_input.lower() == 'smtp_port' or 'port' in select_input.lower():
+                port_input = ''
+                while not port_input.isdigit():
+                    port_input = input('Enter a new SMTP port: ')
+                    if not port_input.isdigit():
+                        print('Invalid input.')
+                        port_input = ''
+                select_input = ''
+                
+            elif select_input.lower() == 'sender_email' or 'sender' in select_input.lower():
+                # NEXT 
+                pass
+                
+            elif select_input.lower() == 'default':
+                print('Restoring default settings.')
+                write_config()
+            elif select_input.lower() in ('end','quit','exit'):
+                print('Finalizing setup.')
+                break
+            else:
+                print('\'{}\': invalid selection.\n'.format(select_input))
+                select_input = ''
+            print(lh_input,serv_input,port_input,sender_input,rec_input,username_input,password_input)
+#                input('Enter a new value for {}: '.format(select_input))
 def send_alert(alerts):
     '''
     Takes alerts from goldsilver.py and sends email as specified in config.
@@ -118,7 +178,7 @@ def send_alert(alerts):
 if not path.exists('send_email_config.py'):
     run_config()
     
-import send_email_config as cfg
+from send_email_config import config_dict as cfg
 
 
 #
@@ -136,6 +196,7 @@ import send_email_config as cfg
         
 
 if __name__ == '__main__':
+#    pass
     run_config(user_input=True)
     
     
