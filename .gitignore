@@ -134,3 +134,5 @@ dmypy.json
 **/silver2019.txt
 **/silverprices.xlsx
 **/silverprices copy.xlsx
+**/goldsilver_alerts_log.txt
+*config.py
