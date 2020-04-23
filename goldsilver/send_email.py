@@ -73,6 +73,7 @@ def run_config(user_input=False):
             print('Current configuration is: {}'.format(cfg))
             select_input = input('Enter a selection to modify, default to return to default localhost, or end to quit: ')
             
+            # Localhost Input
             if select_input == 'localhost':
                 lh_input = ''
                 while not lh_input == True and not lh_input == False:
@@ -87,11 +88,13 @@ def run_config(user_input=False):
                     serv_input = 'localhost'
                     port_input = 1025
                 select_input = ''
-                
+            
+            # SMTP Server Input
             elif select_input.lower() == 'smtp_server' or 'server' in select_input.lower():
                 serv_input = input('Enter a new SMTP server: ')
                 select_input = ''
-                
+            
+            #SMTP Port Input
             elif select_input.lower() == 'smtp_port' or 'port' in select_input.lower():
                 port_input = ''
                 while not port_input.isdigit():
@@ -100,7 +103,8 @@ def run_config(user_input=False):
                         print('Invalid input.')
                         port_input = ''
                 select_input = ''
-                
+            
+            #Sender Email Address Input
             elif select_input.lower() == 'sender_email' or 'sender' in select_input.lower():
                 sender_input = ''
                 while sender_input == '':
@@ -109,7 +113,8 @@ def run_config(user_input=False):
                         print('Invalid email address.')
                         sender_input = ''
                 select_input = ''
-                
+            
+            #Receiver Email Address Input
             elif select_input.lower() == 'receiver_email' or 'rec' in select_input.lower():
                 rec_input = ''
                 while rec_input == '':
@@ -118,21 +123,25 @@ def run_config(user_input=False):
                         print('Invalid email address.')
                         sender_input = ''
                 select_input = ''
-                
+            
+            #Sender Email Account Login Username Input
             elif select_input.lower() == 'username' or 'user' in select_input.lower():
                 username_input = input('Enter username: ')
                 select_input = ''
-                
+            
+            #Sender Email Account Login Password Input
             elif select_input.lower() == 'password' or 'pass' in select_input.lower():
                 password_input = input('Enter your password: ')
                 select_input = ''
-                
+            
+            #Revert to Default Settings
             elif select_input.lower() == 'default':
                 print('\nRestoring default settings.\n')
                 select_input = ''
                 write_config()
                 continue
-                
+            
+            #Exit Config
             elif select_input.lower() in ('end','quit','exit','done'):
                 print('\nEnd config.')
                 break
@@ -189,5 +198,5 @@ if __name__ == '__main__':
 test_alerts = (0, 'No Gold alerts. Gold 200dma: $1524.63  Relative Gold: 1.11', 'No Silver alerts. Silver 200dma: $16.93  Relative Silver: 0.89')
 send_alert(test_alerts)
 
-
+# NExt to do: Setup SMTP viable email !
     
