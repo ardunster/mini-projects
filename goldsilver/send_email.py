@@ -21,10 +21,11 @@ run the config setup
 
 # Imports
 
-import smtplib
+import smtplib, ssl
 import re
 import importlib
 from os import path
+from email.message import EmailMessage
 
 
 # Functions
@@ -164,19 +165,26 @@ def send_alert(alerts):
     Takes alerts from goldsilver.py and sends email as specified in config.
     Input: tuple of (int quantity of alerts, string of gold message, string of silver message)
     '''
-    server = smtplib.SMTP(cfg['smtp_server'],cfg['smtp_port'])
+    msg = EmailMessage()
     
-    message = '''\
-    Subject: {a} Gold/Silver Alerts
+    msg['Subject'] = '{} Gold/Silver Alerts'.format(alerts[0])
+    msg['From'] = cfg['sender_email']
+    msg['To'] = cfg['receiver_email']
     
-    You have {a} alerts from goldsilver.py.
+    msg.set_content('You have {a} alerts from goldsilver.py.\n{g}\n{s}'.format(a=alerts[0], g=alerts[1], s=alerts[2]))
     
-    {g}
-    
-    {s}
-    '''.format(a=alerts[0], g=alerts[1], s=alerts[2])
-    
-    server.sendmail(cfg['sender_email'], cfg['receiver_email'], message)
+    if cfg['localhost'] == True:
+        server = smtplib.SMTP(cfg['smtp_server'],cfg['smtp_port'])
+        server.send_message(msg)
+        
+    elif cfg['localhost'] == False:
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL(cfg['smtp_server'],cfg['smtp_port'], context=context) as server:
+            server.login(cfg['username'], cfg['password'])
+#            server.sendmail(cfg['sender_email'], cfg['receiver_email'], message)
+            server.send_message(msg)
+
+
     
 # Config 
 
@@ -191,12 +199,4 @@ cfg = send_email_config.config_dict
 
 
 if __name__ == '__main__':
-#    run_config(user_input=True)
-    pass
-
-# experimental test data - delete later
-test_alerts = (0, 'No Gold alerts. Gold 200dma: $1524.63  Relative Gold: 1.11', 'No Silver alerts. Silver 200dma: $16.93  Relative Silver: 0.89')
-send_alert(test_alerts)
-
-# NExt to do: Setup SMTP viable email !
-    
+    run_config(user_input=True)

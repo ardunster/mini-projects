@@ -309,14 +309,3 @@ if __name__ == '__main__':
     test_alerts = (0, 'No Gold alerts. Gold 200dma: $1524.63  Relative Gold: 1.11', 'No Silver alerts. Silver 200dma: $16.93  Relative Silver: 0.89')
     send_email.send_alert(test_alerts)
     
-    
-
-'''
-next steps
-- verify email functionality with actual SMTP server
-- tidy unnecessary (unused) code, comments, etc
-- write some tests as practice
-- script to run daily at x time or on startup if not run
-'''
-
-
