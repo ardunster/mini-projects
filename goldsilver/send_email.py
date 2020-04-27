@@ -181,7 +181,6 @@ def send_alert(alerts):
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL(cfg['smtp_server'],cfg['smtp_port'], context=context) as server:
             server.login(cfg['username'], cfg['password'])
-#            server.sendmail(cfg['sender_email'], cfg['receiver_email'], message)
             server.send_message(msg)
 
 
