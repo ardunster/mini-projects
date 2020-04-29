@@ -26,16 +26,46 @@ Steps:
 
 '''
 
+from  cpb_final import is_prime
 
 
-def get_input(question_string,type_to_verify):
-    pass
+def get_int(question_string):
+    '''
+    Retrieves and verifies input is integer.
+    Input: A string to use as the input request.
+    Output: integer of user's input.
+    '''
+    user_input = ''
+    while user_input == '':
+        user_input = input(question_string)
+        if user_input.isdigit():
+            return int(user_input)
+        else:
+            print('Invalid input. Please enter an integer.')
+            user_input = ''
+
+
 
 def factorize(number):
-    pass
+    '''
+    Returns the prime factors of input.
+    '''
+    poss_factors = []
+    ver_factors = []
+    
+    for i in range(1,number):
+        if is_prime(i+1) and number % (i+1) == 0:
+            poss_factors.append(i+1)
+    
+    while number > 1:
+        for i in poss_factors:
+            if number % i == 0:
+                number = number / i
+                ver_factors.append(i)
+        
+    return ver_factors
 
 
 if __name__ == '__main__':
-    print('run code here')
-    user_number = get_input('Enter a number to factorize: ',int)
-    factorize(user_number)
+    user_number = get_int('Enter a number to factorize: ')
+    print(factorize(user_number))
