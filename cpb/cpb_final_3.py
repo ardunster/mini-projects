@@ -39,17 +39,21 @@ My candidates:
     finding coordinates for the cities like latitude and longitude.
 '''
 
-def get_city():
-    '''
-    Gets city name and country from user.
-    '''
-    pass
+import geopy
 
 def locate_city():
     '''
     Fetch from web city's Lat/Long location.
     '''
     pass
+
+
+def get_city():
+    '''
+    Gets city name and country from user.
+    '''
+    pass
+
 
 def calc_distance(pointa,pointb):
     '''
@@ -76,7 +80,16 @@ if __name__ == '__main__':
 
 '''
 Next steps:
-    
+figure out how to fetch geodata
+see what format data needs passed to fetch
+code get_city() to output correct data, and/or call locate_city() in itself and 
+output location
+calculate distance in most convenient measurement
+program input for unit of measure
+convert unit of measure
+display conversion with all relevant data. IE, City A is at x,y. City B is at x2,y2. 
+Distance is z units from A to B. 
+
 After this:
 UI for roller.
 '''
