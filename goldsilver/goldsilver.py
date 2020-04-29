@@ -240,23 +240,28 @@ def check_alerts(dmas):
     
     alerts = 0
     
+    gold_last_date = gold_ws.cell(row=gold_mr, column=1).value.strftime('%Y-%m-%d')
+    gold_last_price = gold_ws.cell(row=gold_mr, column=2).value
+    silver_last_date = silver_ws.cell(row=silver_mr, column=1).value.strftime('%Y-%m-%d')
+    silver_last_price = silver_ws.cell(row=silver_mr, column=2).value
+    
     # Gold
     if  dmas[1] > rgold_low_alert and dmas[1] < rgold_high_alert:
-        gold_alerts = 'No Gold alerts. Gold 200dma: ${:.2f}  Relative Gold: {:.2f}'.format(dmas[0],dmas[1])
+        gold_alerts = 'Last Gold date: {}\nNo Gold alerts. Last Gold Price: ${:.2f} Gold 200dma: ${:.2f}  Relative Gold: {:.2f}'.format(gold_last_date,gold_last_price,dmas[0],dmas[1])
     elif dmas[1] <= rgold_low_alert:
-        gold_alerts = 'LOW Relative Gold. Check for buying conditions! Gold 200dma: ${:.2f}  Relative Gold: {:.2f}'.format(dmas[0],dmas[1])
+        gold_alerts = 'Last Gold date: {}\nLOW Relative Gold. Check for buying conditions! Last Gold Price: ${:.2f} Gold 200dma: ${:.2f}  Relative Gold: {:.2f}'.format(gold_last_date,gold_last_price,dmas[0],dmas[1])
         alerts += 1
     elif dmas[1] >= rgold_high_alert:
-        gold_alerts = 'HIGH Relative Gold. Check for selling conditions! Gold 200dma: ${:.2f}  Relative Gold: {:.2f}'.format(dmas[0],dmas[1])
+        gold_alerts = 'Last Gold date: {}\nHIGH Relative Gold. Last Gold Price: ${:.2f} Check for selling conditions! Gold 200dma: ${:.2f}  Relative Gold: {:.2f}'.format(gold_last_date,gold_last_price,dmas[0],dmas[1])
         alerts += 1
     # Silver
     if  dmas[3] > rsilver_low_alert and dmas[3] < rsilver_high_alert:
-        silver_alerts = 'No Silver alerts. Silver 200dma: ${:.2f}  Relative Silver: {:.2f}'.format(dmas[2],dmas[3])
+        silver_alerts = 'Last Silver date: {}\nNo Silver alerts. Last Silver Price: ${:.2f} Silver 200dma: ${:.2f}  Relative Silver: {:.2f}'.format(silver_last_date,silver_last_price,dmas[2],dmas[3])
     elif dmas[3] <= rsilver_low_alert:
-        silver_alerts = 'LOW Relative Silver. Check for buying conditions! Silver 200dma: ${:.2f}  Relative Silver: {:.2f}'.format(dmas[2],dmas[3])
+        silver_alerts = 'Last Silver date: {}\nLOW Relative Silver. Last Silver Price: ${:.2f} Check for buying conditions! Silver 200dma: ${:.2f}  Relative Silver: {:.2f}'.format(silver_last_date,silver_last_price,dmas[2],dmas[3])
         alerts += 1
     elif dmas[3] >= rsilver_high_alert:
-        silver_alerts = 'HIGH Relative Silver. Check for selling conditions! Silver 200dma: ${:.2f}  Relative Silver: {:.2f}'.format(dmas[2],dmas[3])
+        silver_alerts = 'Last Silver date: {}\nHIGH Relative Silver. Last Silver Price: ${:.2f} Check for selling conditions! Silver 200dma: ${:.2f}  Relative Silver: {:.2f}'.format(silver_last_date,silver_last_price,dmas[2],dmas[3])
         alerts += 1
     
     return alerts, gold_alerts, silver_alerts
