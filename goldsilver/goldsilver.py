@@ -304,7 +304,7 @@ if __name__ == '__main__':
     dmas = calc_dma()
     alerts = check_alerts(dmas)
     log_alerts()
-    send_email(alerts)
+    send_email.send_alert(alerts)
 #    if alerts[0] > 0:
 #        send_email(alerts)
 
