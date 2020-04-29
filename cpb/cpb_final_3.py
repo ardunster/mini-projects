@@ -39,27 +39,50 @@ My candidates:
     finding coordinates for the cities like latitude and longitude.
 '''
 
-import geopy
+# Imports
 
-def locate_city():
+import geopy
+import time
+
+# Functions 
+
+def locate_city(location_input):
     '''
-    Fetch from web city's Lat/Long location.
+    Fetch geocode for given location.
+    Input: String of location to fetch.
+    Output: Geocode location.Location object
     '''
-    pass
+    
+    geolocator = geopy.geocoders.Nominatim(user_agent="CPB Final Project", timeout=5)
+    
+    location = geolocator.geocode(location_input)
+    
+    return location
 
 
 def get_city():
     '''
     Gets city name and country from user.
     '''
-    pass
-
-
-def calc_distance(pointa,pointb):
-    '''
-    Use Lat/Long information to calculate distance between two points.
-    '''
-    pass
+    user_input = ''
+    
+    while user_input == '':
+        user_input = input('Enter a city or other location: ')
+        user_location = locate_city(user_input)
+        if isinstance(user_location, geopy.location.Location):
+            print('\nFound: {}'.format(user_location))
+            verify = input('\nIs this correct? y/n: ')
+            if verify[0].lower() == 'y':
+                print('\nSaved!\n')
+                return user_location
+            else:
+                print('\nPlease retry.')
+                user_input = ''
+        else:
+            print('\nInvalid input.')
+            time.sleep(1)
+            user_input = ''
+        
 
 def unit_input():
     '''
@@ -67,15 +90,23 @@ def unit_input():
     '''
     pass
 
+def calc_distance(pointa,pointb):
+    '''
+    Use Lat/Long information to calculate distance between two points.
+    '''
+    pass
+
+
+
 
 if __name__ == '__main__':
-    print('run code here')
-    #while city1:
-    # input city 1 
-    #fetch city info
-    # verify lat, lon, location, option to re-enter city 1 if incorrect.
-    # ditto city 2
-    #inout to select unit of distance
+    pass
+#    print('Location #1:')
+#    pointa = get_city()
+#    print('Location #2:')
+#    pointb = get_city()
+#    print(pointa, pointb)
+    #input to select unit of distance
     # displays calculated distance
 
 '''
