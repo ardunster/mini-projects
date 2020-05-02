@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+x#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Tue Apr 28 18:31:58 2020
@@ -44,9 +44,6 @@ class TestFinal2(unittest.TestCase):
         factors_16384 = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         self.assertEqual(cpb_final_2.factorize(16384).sort(), factors_16384.sort())
 
-class TestFinal3(unittest.TestCase):
-
-    pass        
 
 
 if __name__ == '__main__':

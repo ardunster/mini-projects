@@ -43,6 +43,7 @@ My candidates:
 
 import geopy
 import time
+from geopy import distance
 
 # Functions 
 
@@ -102,8 +103,8 @@ def unit_input():
             return False
     
     while user_input == '':
-        user_input = input('Select from the following options:\n1: Miles        2: Kilometers   3: Feet \
-                           \n4: Centimeters  5: Leagues      6: Nautical Miles\n: ')
+        user_input = input('Select from the following options:\n1: Miles   2: Kilometers   3: Feet \
+                           \n4: Meters  5: Leagues      6: Nautical Miles\n: ')
         if not user_input[0].isdigit():
             print('Invalid input, please select by number.')
             user_input = ''
@@ -129,9 +130,9 @@ def unit_input():
                 print('\nPlease try again.')
                 user_input = ''
         elif int(user_input[0]) == 4:
-            verify = input('You have selected centimeters, is this correct? ')
+            verify = input('You have selected meters, is this correct? ')
             if verify_yn(verify):
-                return 'centimeters'
+                return 'meters'
             else:
                 print('\nPlease try again.')
                 user_input = ''
@@ -155,39 +156,68 @@ def unit_input():
         
 
 
-def calc_distance(pointa,pointb,uom='miles'):
+def calc_distance(pointa,pointb):
     '''
     Use Lat/Long information to calculate distance between two points.
     '''
-    pass
+    
+    a = (pointa.latitude, pointa.longitude)
+    b = (pointb.latitude, pointb.longitude)
+    
+    dist = distance.distance(a,b).miles
+    
+    return dist
 
-
+def convert_distance(distance,new_uom='miles'):
+    '''
+    Takes a distance in x unit and converts to input unit.
+    Valid UOM inputs: 'miles', 'kilometers', 'feet', 'meters', 'leagues', 'nau_miles'
+    Output: float
+    '''
+    
+    if new_uom == 'miles':
+        dist_converted = "{:.2f}".format(distance) + ' miles'
+    elif new_uom == 'kilometers':
+        dist_converted = "{:.2f}".format(distance * 1.609344) + ' kilometers'
+    elif new_uom == 'feet':
+        dist_converted = "{:.2f}".format(distance * 5280) + ' feet'
+    elif new_uom == 'meters':
+        dist_converted = "{:.2f}".format(distance * 1609.344) + ' meters'
+    elif new_uom == 'leagues':
+        dist_converted = "{:.2f}".format(distance / 3) + ' leagues'
+    elif new_uom == 'nau_miles':
+        dist_converted = "{:.2f}".format(distance * 0.86897624190065) + ' nautical miles'
+    else:
+        raise ValueError('Invalid unit of measurement: {}'.format(new_uom))
+        
+    return dist_converted
 
 
 if __name__ == '__main__':
-    pass
-#    print('Welcome to magical distance calculator, where you can enter two locations \
-#          and a unit of measure and MAGICALLY receive the distance between them in return!')
-#    print('For your first location:')
-#    pointa = get_city()
-#    print('And for your second location:')
-#    pointb = get_city()
-#    print('Now, how would you like to measure your MAGICAL result?')
-#    unit_of_measure = unit_input()
-    #input to select unit of distance
-    # displays calculated distance
+#    pass
+    print('Welcome to magical distance calculator, where you can enter two locations \
+          and a unit of measure and MAGICALLY receive the distance between them in return!')
+    print('For your first location:')
+    pointa = get_city()
+    print('And for your second location:')
+    pointb = get_city()
+    dist = calc_distance(pointa,pointb)
+    print('Now, how would you like to measure your MAGICAL result?')
+    unit_of_measure = unit_input()
+    dist_converted = convert_distance(dist,unit_of_measure)
+    
+    print('As if by magic, the following appears before your eyes:\n{a} (the first location you selected) is {d} away from {b} (the second location you selected).\nIsn\'t that amazing????\n'.format(a=pointa.address, b=pointb.address, d=dist_converted))
+    print('And were you wondering? I know you were...\n{a} is at {alat},{alon}, and {b} is at {blat},{blon}. Now you know! :D'.format(a=pointa.address,alat=pointa.latitude,alon=pointa.longitude,b=pointb.address,blat=pointb.latitude,blon=pointb.longitude))
+
+
 
 '''
 Next steps:
 
-calculate distance in most convenient measurement
-program input for unit of measure
-convert unit of measure
-display conversion with all relevant data. IE, City A is at x,y. City B is at x2,y2. 
-Distance is z units from A to B. 
+
 
 This is going super fast and is not a week long project, 2 hours in and I have 
-everything but the calculation.
+everything but the calculations.
 
 New idea: let's figure out how to slap an UI on it! :D
 
