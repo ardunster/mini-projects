@@ -194,7 +194,6 @@ def convert_distance(distance,new_uom='miles'):
 
 
 if __name__ == '__main__':
-#    pass
     print('Welcome to magical distance calculator, where you can enter two locations \
           and a unit of measure and MAGICALLY receive the distance between them in return!')
     print('For your first location:')
