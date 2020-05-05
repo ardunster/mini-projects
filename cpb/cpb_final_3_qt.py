@@ -25,10 +25,32 @@ from PyQt5.QtGui import *
 import sys
 
 
-
-
-
-#----------------------------------
+class Points(QWidget):
+    
+    def __init__(self, pos, *args, **kwargs):
+        super(Points, self).__init__(*args, **kwargs)
+        
+        layout_shell = QVBoxLayout()
+        
+        layout_input = QHBoxLayout()
+        # layout_input.setStyleSheet("QPushButton { margin: 0ex; }")
+        # layout_input.setContentsMargins(0,0,0,0)
+        # layout_input.setSpacing(0)
+        
+        
+        label = QLabel('Point {}'.format(pos))
+        data = QLabel('No data {}'.format(pos))
+        data.setText('Still no data {}'.format(pos))
+        
+        input_box = QLineEdit()
+        push = QPushButton('OK')
+        
+        layout_shell.addWidget(label)
+        layout_shell.addWidget(data)
+        layout_input.addWidget(input_box)
+        layout_input.addWidget(push)
+        
+        
 
 class AtoBWindow(QMainWindow):
     
@@ -41,37 +63,36 @@ class AtoBWindow(QMainWindow):
         # layout = QVBoxLayout()
         
         # Point A
-        layout_a = QVBoxLayout()
+        # layout_a = QVBoxLayout()
         
-        label_pointa = QLabel('Point A')
-        # label_pointa.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        data_pointa = QLabel('No data A')
-        data_pointa.setText('Still no data A')
-        input_pointa = QLineEdit()
-        push_pointa = QPushButton('OK')
+        # label_pointa = QLabel('Point A')
+        # data_pointa = QLabel('No data A')
+        # data_pointa.setText('Still no data A')
+        # input_pointa = QLineEdit()
+        # push_pointa = QPushButton('OK')
         
-        layout_a.addWidget(label_pointa)
-        layout_a.addWidget(data_pointa)
-        layout_a.addWidget(input_pointa)
-        layout_a.addWidget(push_pointa)
+        # layout_a.addWidget(label_pointa)
+        # layout_a.addWidget(data_pointa)
+        # layout_a.addWidget(input_pointa)
+        # layout_a.addWidget(push_pointa)
         
         # Point B
-        layout_b = QVBoxLayout()
+        # layout_b = QVBoxLayout()
         
-        label_pointb = QLabel('Point B')
-        data_pointb = QLabel('No data B')
-        data_pointb.setText('Still no data B')
-        input_pointb = QLineEdit()
-        push_pointb = QPushButton('OK')
+        # label_pointb = QLabel('Point B')
+        # data_pointb = QLabel('No data B')
+        # data_pointb.setText('Still no data B')
+        # input_pointb = QLineEdit()
+        # push_pointb = QPushButton('OK')
         
-        layout_b.addWidget(label_pointb)
-        layout_b.addWidget(data_pointb)
-        layout_b.addWidget(input_pointb)
-        layout_b.addWidget(push_pointb)
+        # layout_b.addWidget(label_pointb)
+        # layout_b.addWidget(data_pointb)
+        # layout_b.addWidget(input_pointb)
+        # layout_b.addWidget(push_pointb)
 
         
         # UOM
-        layout_uom = QVBoxLayout()
+        layout_uom = QGridLayout()
         
         mi_button = QRadioButton('Miles')
         km_button = QRadioButton('Kilometers')
@@ -80,12 +101,12 @@ class AtoBWindow(QMainWindow):
         lg_button = QRadioButton('Leagues')
         nm_button = QRadioButton('Nautical Miles')
         
-        layout_uom.addWidget(mi_button)
-        layout_uom.addWidget(km_button)
-        layout_uom.addWidget(ft_button)
-        layout_uom.addWidget(m_button)
-        layout_uom.addWidget(lg_button)
-        layout_uom.addWidget(nm_button)
+        layout_uom.addWidget(mi_button, 0, 0)
+        layout_uom.addWidget(km_button, 0, 1)
+        layout_uom.addWidget(ft_button, 0, 2)
+        layout_uom.addWidget(m_button, 1, 0)
+        layout_uom.addWidget(lg_button, 1, 1)
+        layout_uom.addWidget(nm_button, 1, 2)
         
         # Calculate
         layout_calc = QVBoxLayout()
@@ -98,11 +119,11 @@ class AtoBWindow(QMainWindow):
         
         
         # Layout
-        widget_a = QWidget()
-        widget_a.setLayout(layout_a)
+        # widget_a = QWidget()
+        # widget_a.setLayout(layout_a)
         
-        widget_b = QWidget()
-        widget_b.setLayout(layout_b)
+        # widget_b = QWidget()
+        # widget_b.setLayout(layout_b)
         
         widget_uom = QWidget()
         widget_uom.setLayout(layout_uom)
@@ -111,8 +132,10 @@ class AtoBWindow(QMainWindow):
         widget_calc.setLayout(layout_calc)
         
         layout_points = QHBoxLayout()
-        layout_points.addWidget(widget_a)
-        layout_points.addWidget(widget_b)
+        pointa = Points('A')
+        pointb = Points('B')
+        layout_points.addWidget(pointa)
+        layout_points.addWidget(pointb)
         
         widget_points = QWidget()
         widget_points.setLayout(layout_points)
@@ -125,7 +148,7 @@ class AtoBWindow(QMainWindow):
         main_widget = QWidget()
         main_widget.setLayout(layout)
         
-        self.setCentralWidget(main_widget)
+        self.setCentralWidget(widget_points)
         
 
 app = QApplication([])
@@ -139,7 +162,12 @@ app.exec()
     
 
 
+'''
 
+Next Step: Figure out why my Points class isn't working
+
+
+'''
 
 
 
