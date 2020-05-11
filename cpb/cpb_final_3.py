@@ -61,6 +61,13 @@ def locate_city(location_input):
     return location
 
 
+def verify_city(location_input):
+    if isinstance(location_input, geopy.location.Location):
+        return True
+    else:
+        return False
+
+
 def get_city():
     '''
     Gets city name and country from user.
@@ -72,7 +79,7 @@ def get_city():
     while user_input == '':
         user_input = input('Enter a city or other location: ')
         user_location = locate_city(user_input)
-        if isinstance(user_location, geopy.location.Location):
+        if verify_city(user_location):
             print('\nFound: {}'.format(user_location))
             verify = input('Is this correct? y/n: ')
             if verify[0].lower() == 'y':

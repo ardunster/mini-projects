@@ -165,64 +165,128 @@ from PyQt5.QtGui import *
 
 
 
-class Color(QWidget):
+# class Color(QWidget):
     
-    def __init__(self, color, *args, **kwargs):
-        super(Color, self).__init__(*args, **kwargs)
-        self.setAutoFillBackground(True)
+#     def __init__(self, color, *args, **kwargs):
+#         super(Color, self).__init__(*args, **kwargs)
+#         self.setAutoFillBackground(True)
         
-        palette = self.palette()
-        palette.setColor(QPalette.Window, QColor(color))
-        self.setPalette(palette)
+#         palette = self.palette()
+#         palette.setColor(QPalette.Window, QColor(color))
+#         self.setPalette(palette)
         
         
+# class MainWindow(QMainWindow):
+    
+#     def __init__(self, *args, **kwargs):
+#         super(MainWindow, self).__init__(*args, **kwargs)
+        
+#         self.setWindowTitle('Colorful')
+        
+#         # layout = QHBoxLayout()
+
+#         # layout.addWidget(Color('red'))
+#         # layout.addWidget(Color('green'))
+#         # layout.addWidget(Color('blue'))
+#         # layout.addWidget(Color('orange'))
+        
+        
+#         # layout1 = QHBoxLayout()
+#         # layout1.setContentsMargins(3,5,3,5)
+#         # layout1.setSpacing(3)
+#         # layout2 = QVBoxLayout()
+#         # layout3 = QVBoxLayout()
+
+#         # layout2.addWidget(Color('red'))
+#         # layout2.addWidget(Color('yellow'))
+#         # layout2.addWidget(Color('purple'))
+
+#         # layout1.addLayout( layout2 )
+
+#         # layout1.addWidget(Color('green'))
+
+#         # layout3.addWidget(Color('red'))
+#         # layout3.addWidget(Color('purple'))
+        
+#         # layout1.addLayout( layout3 )
+        
+#         layout = QGridLayout()
+
+#         layout.addWidget(Color('red'), 0, 0)
+#         layout.addWidget(Color('green'), 1, 0)
+#         layout.addWidget(Color('blue'), 1, 1)
+#         layout.addWidget(Color('purple'), 2, 1)
+        
+#         widget = QWidget()
+#         widget.setLayout(layout)
+        
+#         self.setCentralWidget(widget)
+        
+
+
+# class MainWindow(QMainWindow):
+
+#     def __init__(self, *args, **kwargs):
+#         super(MainWindow, self).__init__(*args, **kwargs)
+        
+#         self.setWindowTitle("My Awesome App")
+        
+#         widget = QComboBox()
+#         widget.addItems(["One", "Two", "Three"])
+
+#         # The default signal from currentIndexChanged sends the index
+#         widget.currentIndexChanged.connect( self.index_changed )
+        
+#         # The same signal can send a text string
+#         widget.currentIndexChanged[str].connect( self.text_changed )
+
+#         self.setCentralWidget(widget)
+
+
+#     def index_changed(self, i): # i is an int
+#         print(i)
+        
+#     def text_changed(self, s): # s is a str
+#         print(s)
+
+
 class MainWindow(QMainWindow):
-    
+
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         
-        self.setWindowTitle('Colorful')
+        self.setWindowTitle("My Awesome App")
         
-        # layout = QHBoxLayout()
+        widget = QLineEdit()
+        widget.setMaxLength(10)
+        widget.setPlaceholderText("Enter your text")
 
-        # layout.addWidget(Color('red'))
-        # layout.addWidget(Color('green'))
-        # layout.addWidget(Color('blue'))
-        # layout.addWidget(Color('orange'))
+        #widget.setReadOnly(True) # uncomment this to make readonly
         
-        
-        # layout1 = QHBoxLayout()
-        # layout1.setContentsMargins(3,5,3,5)
-        # layout1.setSpacing(3)
-        # layout2 = QVBoxLayout()
-        # layout3 = QVBoxLayout()
+        widget.returnPressed.connect(self.return_pressed)
+        widget.selectionChanged.connect(self.selection_changed)
+        widget.textChanged.connect(self.text_changed)
+        widget.textEdited.connect(self.text_edited)
 
-        # layout2.addWidget(Color('red'))
-        # layout2.addWidget(Color('yellow'))
-        # layout2.addWidget(Color('purple'))
-
-        # layout1.addLayout( layout2 )
-
-        # layout1.addWidget(Color('green'))
-
-        # layout3.addWidget(Color('red'))
-        # layout3.addWidget(Color('purple'))
-        
-        # layout1.addLayout( layout3 )
-        
-        layout = QGridLayout()
-
-        layout.addWidget(Color('red'), 0, 0)
-        layout.addWidget(Color('green'), 1, 0)
-        layout.addWidget(Color('blue'), 1, 1)
-        layout.addWidget(Color('purple'), 2, 1)
-        
-        widget = QWidget()
-        widget.setLayout(layout)
-        
         self.setCentralWidget(widget)
         
         
+    def return_pressed(self):
+        print("Return pressed!")
+        self.centralWidget().setText("BOOM!")
+
+    def selection_changed(self):
+        print("Selection changed")
+        print(self.centralWidget().selectedText())
+        
+    def text_changed(self, s):
+        print("Text changed...")
+        print(s)
+            
+    def text_edited(self, s):
+        print("Text edited...")
+        print(s)
+
 # You need one (and only one) QApplication instance per application.
 # Pass in sys.argv to allow command line arguments for your app.
 # If you know you won't use command line arguments QApplication([]) works too.
