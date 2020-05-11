@@ -14,20 +14,15 @@ command line/IPython console.
 '''
 
 
-# from PyQt5.QtCore import 
-# from PyQt5.QtGui import 
 from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QLineEdit, QPushButton, 
                              QVBoxLayout, QLabel, QMainWindow, QGridLayout, 
-                             QRadioButton, QApplication, QFrame, QSizePolicy,
-                             QDialog)
+                             QRadioButton, QApplication, QFrame, QSizePolicy)
 
-# from PyQt5.QtWidgets import *
-# from PyQt5.QtCore import *
-# from PyQt5.QtGui import *
 
-# import sys
-
+from PyQt5.QtCore import *
 import cpb_final_3
+
+
 
 class Points(QFrame):
     
@@ -45,6 +40,7 @@ class Points(QFrame):
         self.input_box.setPlaceholderText('Enter Location {}'.format(pos))
         self.push = QPushButton('OK')
         
+        self.valid_location = False
         self.input_box.returnPressed.connect(self.ok_pressed)
         self.push.clicked.connect(self.ok_pressed)
         
@@ -61,16 +57,22 @@ class Points(QFrame):
         layout_shell.setSpacing(4)
         
         self.label = QLabel('Point {}'.format(pos))
+        self.label.setAlignment(Qt.AlignCenter)
         label_font = self.label.font()
         label_font.setBold(True)
         label_font.setPointSize(16)
         self.label.setFont(label_font)
         self.data = QLabel('No data {}'.format(pos))
         self.data.setMinimumHeight(48)
-        # self.data.setMinimumWidth(300)
+        self.data_lat_long = QLabel('Latitude: {:.7f} Longitude: {:.7f}'.format(0,0))
+        latlon_font = self.data_lat_long.font()
+        latlon_font.setPointSize(8)
+        self.data_lat_long.setFont(latlon_font)
+
 
         layout_shell.addWidget(self.label)
         layout_shell.addWidget(self.data)
+        layout_shell.addWidget(self.data_lat_long)
         layout_shell.addWidget(self.widget_input)
 
         self.setLayout(layout_shell)
@@ -79,18 +81,17 @@ class Points(QFrame):
         
     def ok_pressed(self):
         location_input = self.input_box.text()
-        location = cpb_final_3.locate_city(location_input)
-        if cpb_final_3.verify_city(location):
-            self.data.setText(str(location))
+        self.location = cpb_final_3.locate_city(location_input)
+        if cpb_final_3.verify_city(self.location):
+            self.data.setText(str(self.location))
             self.data.setWordWrap(True)
+            self.data_lat_long.setText('Latitude: {:.7f} Longitude: {:.7f}'.format(self.location.latitude,self.location.longitude))
             self.valid_location = True
         else:
             self.data.setText('Invalid Input {}'.format(location_input))
+            self.data_lat_long.setText('Latitude: {:.7f} Longitude: {:.7f}'.format(0,0))
             self.valid_location = False
 
-        
-
-        
 
 class AtoBWindow(QMainWindow):
     
@@ -107,10 +108,10 @@ class AtoBWindow(QMainWindow):
         layout_points = QHBoxLayout()
         layout_points.setContentsMargins(0,0,0,0)
         layout_points.setSpacing(0)
-        pointa = Points('A')
-        pointb = Points('B')
-        layout_points.addWidget(pointa, 1)
-        layout_points.addWidget(pointb, 1)
+        self.pointa = Points('A')
+        self.pointb = Points('B')
+        layout_points.addWidget(self.pointa, 1)
+        layout_points.addWidget(self.pointb, 1)
         
         widget_points = QWidget()
         widget_points.setLayout(layout_points)
@@ -123,7 +124,7 @@ class AtoBWindow(QMainWindow):
         
         layout_uom = QGridLayout()
         
-        self.uom = ''
+        self.uom = 'miles'
         
         mi_button = QRadioButton('Miles')
         mi_button.setChecked(True)
@@ -151,11 +152,12 @@ class AtoBWindow(QMainWindow):
         
         layout_calc = QVBoxLayout()
         
-        label_calc = QLabel('')
+        self.label_calc = QLabel('')
+        self.label_calc.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         push_calc = QPushButton('Calculate!')
-        # push_calc.setEnabled(False)
+        push_calc.clicked.connect(self.calc_pressed)
         
-        layout_calc.addWidget(label_calc)
+        layout_calc.addWidget(self.label_calc)
         layout_calc.addWidget(push_calc)
         
         
@@ -212,11 +214,14 @@ class AtoBWindow(QMainWindow):
             else:
                 self.uom = ''
         
-        # print(self.uom)
-        
         
     def calc_pressed(self):
-        pass
+        if self.pointa.valid_location and self.pointb.valid_location and self.uom:
+            dist = cpb_final_3.calc_distance(self.pointa.location,self.pointb.location)
+            dist_converted = cpb_final_3.convert_distance(dist, self.uom)
+            self.label_calc.setText(dist_converted)
+        else:
+            self.label_calc.setText('Invalid data')
         
 
         
@@ -230,18 +235,3 @@ window.show()
 app.exec()
 
     
-
-
-'''
-
-Next Step:
-
-Add borders to elements and play with spacing and style sheets.
-Start attaching functionality to buttons.
-
-
-'''
-
-
-
-
