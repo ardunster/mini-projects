@@ -171,7 +171,7 @@ def send_alert(alerts):
     msg['From'] = cfg['sender_email']
     msg['To'] = cfg['receiver_email']
     
-    msg.set_content('You have {a} alerts from goldsilver.py.\n{g}\n{s}'.format(a=alerts[0], g=alerts[1], s=alerts[2]))
+    msg.set_content('You have {a} alerts from goldsilver.py.\n\n{g}\n\n{s}'.format(a=alerts[0], g=alerts[1], s=alerts[2]))
     
     if cfg['localhost'] == True:
         server = smtplib.SMTP(cfg['smtp_server'],cfg['smtp_port'])
@@ -199,3 +199,5 @@ cfg = send_email_config.config_dict
 
 if __name__ == '__main__':
     run_config(user_input=True)
+#    test_alert = (0, 'Last Gold date: 2020-04-27\nNo Gold alerts. Last Gold Price: $1714.95 Gold 200dma: $1533.50  Relative Gold: 1.12', 'Last Silver date: 2020-04-27\nNo Silver alerts. Last Silver Price: $15.20 Silver 200dma: $16.94  Relative Silver: 0.90')
+#    send_alert(test_alert)
