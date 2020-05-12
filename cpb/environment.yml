@@ -1,0 +1,8 @@
+name: cpb
+channels:
+  - defaults
+dependencies:
+  - python=3.7
+  - notebook
+  - spyder
+  - geopy
