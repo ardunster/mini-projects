@@ -36,6 +36,10 @@ typos to include:
     
 '''
 
+class TypoError(Exception):
+    pass
+
+
 def get_input():
     '''
     Asks for user input, verifies that it's at least something like a 
@@ -63,9 +67,14 @@ def random_typo(user_input):
     a string of a successful result.
     '''
     
-    typos = [typo_1, typo_2]
+    typos = [typo_1, typo_2, typo_3]
+    while True:
+        try:
+            return random.choice(typos)(user_input)
+        except TypoError as e:
+            print(f'e = {e}')
+            continue
     
-    return random.choice(typos)(user_input)
     
 
 def typo_1(string):
@@ -74,6 +83,9 @@ def typo_1(string):
 def typo_2(string):
     print(f'Typo 2 of {string}')
 
+def typo_3(string):
+    print(f'Typo 3 of {string}')
+    raise TypoError
 
 
 if __name__ == '__main__':
