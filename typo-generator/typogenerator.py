@@ -15,8 +15,9 @@ typos to include:
     # random swap of letters
     # random removal of whitespace or punctuation
     # random insertion of whitespace or punctuation (punctuation near proximate letters)
-    displacement of punctuation back one space
-    turn capital letter lower case, move capitalization to different letter
+    # displacement of punctuation back one space
+    # turn capital letter lower case, move capitalization to different letter
+    random capitalization of leading letter of word
     take character requiring shift key and convert to same keyboard location without shift
     insertion of proximate letter
     extra e after t or d at end of word
@@ -144,10 +145,25 @@ def typo_5(string):
 
 def typo_6(string):
     '''Typo introduction: displacement of punctuation'''
+    re_match = re.search('[\'",.;?!]', string)
+    if not re_match:
+        raise TypoError
+    else:
+        output = string[:re_match.start()-1] + string[re_match.start()] + string[re_match.start()-1] + string[re_match.end():]
+        
+    return output
     
+def typo_7(string):
+    '''Typo introduction: displacement of capitalization'''
+    re_match = re.search('[A-Z]{1}', string)
+    if not re_match:
+        raise TypoError
+    elif string[re_match.start() + 1].isupper():
+        raise TypoError
+    else:
+        output = string[:re_match.start()+1].lower() + string[re_match.start()+1].upper() + string[re_match.start()+2:]
     
-    
-    
+    return output
     
     
     
@@ -157,10 +173,10 @@ def typo_6(string):
         
 
 # list of all possible typo introduction functions
-typos = [typo_1, typo_2, typo_3, typo_4, typo_5]
+typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7]
 
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
     # print('**~~~~Welcome to Typo Generator 25,000!!!~~~~**\n')
     # print('The Latest and Greatest script to randomly introduce errors into perfectly good text.',
     #       '\nGuaranteed to drive your neighborhood grammar nazis crazy!\n')
@@ -171,9 +187,9 @@ typos = [typo_1, typo_2, typo_3, typo_4, typo_5]
     
     # user_input = get_input()
     
-    # test_string = 'Test string'
+    test_string = 'Test string longer!'
     
-    # print(random_typo(test_string, typos))
+    print(random_typo(test_string, typos))
     
     # while playing:
     # get input
