@@ -12,9 +12,9 @@ import re
 '''
 typos to include:
     # skip random letter in mid word (especially consonant between vowel and e)
-    random swap of letters
-    random removal of whitespace or punctuation
-    random insertion of whitespace or punctuation (punctuation near proximate letters)
+    # random swap of letters
+    # random removal of whitespace or punctuation
+    # random insertion of whitespace or punctuation (punctuation near proximate letters)
     displacement of punctuation back one space
     turn capital letter lower case, move capitalization to different letter
     take character requiring shift key and convert to same keyboard location without shift
@@ -31,10 +31,17 @@ typos to include:
     I = l
     x = z
     n = b
-    o = i
     m = n
+    o = p
+    p = [, -, 0, ;
+    o = i, p, 9 or 0
+    t = g
     take entire word and shift letters used by one hand right or left by one keyboard space
     double a random letter
+    sentence starting in caps converted to all caps
+    you're = your or youre
+    they're = their or there or theyre
+    remove h from th, sh, etc
 '''
 
 class TypoError(Exception):
@@ -78,32 +85,82 @@ def random_typo(user_input,typos):
     
 
 def typo_1(string):
-    '''Typo introduction: skip a random letter. Tries consonant between a vowel and e first.'''
-    vce_pattern = '[aeiou][^aeiou]e' #should match vowel, consonant, e
-    re_match = re.search(vce_pattern, string)
+    '''Typo introduction: skip a random character. Tries consonant between a vowel and e first.'''
+    vce_pattern = re.compile('[aeiou][^aeiou]e') #should match vowel, consonant, e
+    re_match = vce_pattern.search(string)
     if re_match:
         output = string[:re_match.start()+1] + string[re_match.end()-1:]
     else:
-        rand_num = random.randrange(1,len(string))
+        rand_num = random.randrange(1,(len(string)-1))
         output = string[:rand_num-1] + string[rand_num:]
     return output
-    
+
+
 def typo_2(string):
     '''Typo introduction: random swap of two adjacent characters in input'''
-    rand_num = random.randrange(1,len(string))
+    rand_num = random.randrange(1,(len(string)-1))
     output = string[:rand_num-1] + string[rand_num] + string[rand_num-1] + string[rand_num+1:]
     return output
 
-def typo_3(string):
-    print(f'Typo 3 of {string}')
-    raise TypoError
 
+def typo_3(string):
+    '''Typo introduction: random removal of whitespace or punctuation'''
+    re_match = re.search('[ .,?!]', string)
+    if not re_match:
+        raise TypoError
+    else:
+        chars = [pos for pos,char in enumerate(string) if char in (' ',',','.','?','!')]
+        rand_num = random.choice(chars)
+        output = string[:rand_num] + string[rand_num+1:]
+    
+    return output
+
+
+def typo_4(string):
+    '''Typo introduction: random addition of whitespace'''
+    rand_num = random.randrange(1,(len(string)-1))
+    output = string[:rand_num] + ' ' + string[rand_num:]
+    return output
+
+
+def typo_5(string):
+    '''Typo introduction: addition of punctuation in reasonably possible location'''
+    re_match = re.search('[mklp]', string)
+    if not re_match:
+        raise TypoError
+    else:
+        rand_num = random.choice((0,1))
+        if re_match.group() == 'm' or re_match.group() == 'k':
+            output = string[:re_match.start()+rand_num] + ',' + string[re_match.start()+rand_num:]
+        elif re_match.group() == 'l':
+            r_punct = random.choice((',','.',';'))
+            output = string[:re_match.start()+rand_num] + r_punct + string[re_match.start()+rand_num:]
+        elif re_match.group() == 'p':
+            r_punct = random.choice((';','[','-',''))
+            output = string[:re_match.start()+rand_num] + r_punct + string[re_match.start()+rand_num:]
+
+    return output
+
+
+def typo_6(string):
+    '''Typo introduction: displacement of punctuation'''
+    
+    
+    
+    
+    
+    
+    
+    
+        # output = string[:re_match.start()+rand_num] + ' ' + string[re_match.start()+rand_num:]
+        
+        
 
 # list of all possible typo introduction functions
-typos = [typo_1, typo_2, typo_3]
+typos = [typo_1, typo_2, typo_3, typo_4, typo_5]
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     # print('**~~~~Welcome to Typo Generator 25,000!!!~~~~**\n')
     # print('The Latest and Greatest script to randomly introduce errors into perfectly good text.',
     #       '\nGuaranteed to drive your neighborhood grammar nazis crazy!\n')
@@ -114,9 +171,9 @@ if __name__ == '__main__':
     
     # user_input = get_input()
     
-    test_string = 'Test string'
+    # test_string = 'Test string'
     
-    print(random_typo(test_string, typos))
+    # print(random_typo(test_string, typos))
     
     # while playing:
     # get input
@@ -124,6 +181,9 @@ if __name__ == '__main__':
     # apply a random error
     # check for valid errors first, or try to apply one at random, try a different one if it doesn't work?
     # How many errors to generate? add 1 per x words/characters, or, random of range of x per y characters. 
+    
+    # errors_to_gen = random.randrange(1,(len(user_input)//10))
+    
     # after generating errored result, ask: "Reroll, New Sentence, Exit"
     
     # print(f'Thanks for using Typo Generator 25,000, {user_name}! Run the script again to play again. Have a nice day!')
