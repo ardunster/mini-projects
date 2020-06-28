@@ -37,9 +37,11 @@ typos to include:
 '''
 
 def get_input():
-    '''Asks for user input, verifies that it's at least something like a 
+    '''
+    Asks for user input, verifies that it's at least something like a 
     sentence (longer than 3 characters, not all digits, contains vowels), and 
-    returns string'''
+    returns string
+    '''
     output = ''
     while output == '':
         output = input('Please enter a sentence:\n> ')
@@ -55,6 +57,23 @@ def get_input():
             
     return output
 
+def random_typo(user_input):
+    '''
+    Takes a string as an argument, selects a random typo function to apply, returns
+    a string of a successful result.
+    '''
+    
+    typos = [typo_1, typo_2]
+    
+    return random.choice(typos)(user_input)
+    
+
+def typo_1(string):
+    print(f'Typo 1 of {string}')
+    
+def typo_2(string):
+    print(f'Typo 2 of {string}')
+
 
 
 if __name__ == '__main__':
@@ -66,7 +85,12 @@ if __name__ == '__main__':
     
     # print(f'\nGreat, {user_name}! What text would you like to generate errors in?')
     
-    user_input = get_input()
+    # user_input = get_input()
+    
+    test_string = 'Test string'
+    
+    random_typo(test_string)
+    
     # while playing:
     # get input
     # verify input is usable
