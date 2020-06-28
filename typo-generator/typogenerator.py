@@ -7,10 +7,11 @@ Created on Sun Jun 28 12:04:12 2020
 """
 
 import random
+import re
 
 '''
 typos to include:
-    skip random letter in mid word (especially consonant between vowel and e)
+    # skip random letter in mid word (especially consonant between vowel and e)
     random swap of letters
     random removal of whitespace or punctuation
     random insertion of whitespace or punctuation (punctuation near proximate letters)
@@ -33,7 +34,7 @@ typos to include:
     o = i
     m = n
     take entire word and shift letters used by one hand right or left by one keyboard space
-    
+    double a random letter
 '''
 
 class TypoError(Exception):
@@ -61,31 +62,45 @@ def get_input():
             
     return output
 
-def random_typo(user_input):
+def random_typo(user_input,typos):
     '''
     Takes a string as an argument, selects a random typo function to apply, returns
-    a string of a successful result.
+    a string of a successful result. Retries random typos until one works.
     '''
     
-    typos = [typo_1, typo_2, typo_3]
     while True:
         try:
             return random.choice(typos)(user_input)
-        except TypoError as e:
-            print(f'e = {e}')
+        except TypoError:
+            print('error')
             continue
-    
+
     
 
 def typo_1(string):
-    print(f'Typo 1 of {string}')
+    '''Typo introduction: skip a random letter. Tries consonant between a vowel and e first.'''
+    vce_pattern = '[aeiou][^aeiou]e' #should match vowel, consonant, e
+    re_match = re.search(vce_pattern, string)
+    if re_match:
+        output = string[:re_match.start()+1] + string[re_match.end()-1:]
+    else:
+        rand_num = random.randrange(1,len(string))
+        output = string[:rand_num-1] + string[rand_num:]
+    return output
     
 def typo_2(string):
-    print(f'Typo 2 of {string}')
+    '''Typo introduction: random swap of two adjacent characters in input'''
+    rand_num = random.randrange(1,len(string))
+    output = string[:rand_num-1] + string[rand_num] + string[rand_num-1] + string[rand_num+1:]
+    return output
 
 def typo_3(string):
     print(f'Typo 3 of {string}')
     raise TypoError
+
+
+# list of all possible typo introduction functions
+typos = [typo_1, typo_2, typo_3]
 
 
 if __name__ == '__main__':
@@ -101,7 +116,7 @@ if __name__ == '__main__':
     
     test_string = 'Test string'
     
-    random_typo(test_string)
+    print(random_typo(test_string, typos))
     
     # while playing:
     # get input
