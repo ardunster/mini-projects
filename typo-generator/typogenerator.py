@@ -43,6 +43,7 @@ typos to include:
     you're = your or youre
     they're = their or there or theyre
     remove h from th, sh, etc
+    replace punctuation with proximate letter
 '''
 
 class TypoError(Exception):
@@ -175,6 +176,9 @@ def typo_7(string):
 # list of all possible typo introduction functions
 typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7]
 
+# characters per typo introduction
+typo_frequency = 15
+
 
 if __name__ == '__main__':
     # print('**~~~~Welcome to Typo Generator 25,000!!!~~~~**\n')
@@ -187,9 +191,9 @@ if __name__ == '__main__':
     
     # user_input = get_input()
     
-    test_string = 'Test string longer!'
+    test_string = 'Test string longer! With some extra stuff, gotta make this long enough to work, right? How many errors can we GET anyway?'
     
-    print(random_typo(test_string, typos))
+    # print(random_typo(test_string, typos))
     
     # while playing:
     # get input
@@ -198,9 +202,26 @@ if __name__ == '__main__':
     # check for valid errors first, or try to apply one at random, try a different one if it doesn't work?
     # How many errors to generate? add 1 per x words/characters, or, random of range of x per y characters. 
     
-    # errors_to_gen = random.randrange(1,(len(user_input)//10))
+    # output_string = user_input
+    output_string = test_string
+    
+    if (len(output_string)//typo_frequency) > 1:
+        errors_to_gen = random.randrange(1,(len(output_string)//typo_frequency))
+    else:
+        errors_to_gen = 1
+    
+    for _ in range(errors_to_gen):
+        output_string = random_typo(output_string, typos)
+        
+    print(f'Result: {output_string}, {errors_to_gen}')
     
     # after generating errored result, ask: "Reroll, New Sentence, Exit"
     
     # print(f'Thanks for using Typo Generator 25,000, {user_name}! Run the script again to play again. Have a nice day!')
+
+# There is unfortunately a chance of repeating the same error multiple times in 
+# a result that does not make sense (moving initial capital 3 letters over, for example).
+# This maybe could be fixed by making a fresh copy of the typos list for each 
+# string processed and .pop() the typo used. 
+# will try if I have time, low priority
 
