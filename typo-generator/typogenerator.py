@@ -17,7 +17,7 @@ typos to include:
     # random insertion of whitespace or punctuation (punctuation near proximate letters)
     # displacement of punctuation back one space
     # turn capital letter lower case, move capitalization to different letter
-    random capitalization of leading letter of word
+    # random capitalization of leading letter of word
     take character requiring shift key and convert to same keyboard location without shift
     insertion of proximate letter
     extra e after t or d at end of word
@@ -44,6 +44,7 @@ typos to include:
     they're = their or there or theyre
     remove h from th, sh, etc
     replace punctuation with proximate letter
+    n at end of word = ng
 '''
 
 class TypoError(Exception):
@@ -105,7 +106,7 @@ def reroll_or():
         elif choice[0].lower() == 'n':
             output = 'n'
             print('New entry!')
-        elif choice[0].lower() == 'e':
+        elif choice[0].lower() == 'e' or choice[0].lower() == 'x':
             output = 'e'
             print('Exiting....')
         else:
@@ -187,6 +188,7 @@ def typo_6(string):
         
     return output
     
+
 def typo_7(string):
     '''Typo introduction: displacement of capitalization'''
     re_match = re.search('[A-Z]{1}', string)
@@ -199,17 +201,41 @@ def typo_7(string):
     
     return output
     
-def typo_8(string):
-    '''Typo introduction: random capitalization of leading letter'''
-    pass
 
+def typo_8(string):
+    '''Typo introduction: random capitalization of leading letter in a word'''
+    working = string.split()
+    if len(working) == 1:
+        raise TypoError
+    else:
+        rand_num = random.randrange(1,len(working))
+        working[rand_num] = working[rand_num].capitalize()
+        output = ' '.join(working)
+    
+    return output
+
+
+def typo_9(string):
+    '''Typo introduction: replace a character that requires the shift key with the same keyboard position without it'''
+    re_match = re.search('[!@#$%^&*()_+:<>?]{1}', string)
+    if not re_match:
+        raise TypoError    
+    else:
+        char_dict = {'!':'1', '@':'2', '#':'3', '$':'4', '%':'5', '^':'6', '&':'7',
+                     '*':'8', '(':'9', ')':'0', '_':'-', '+':'=', ':':';', '<':',',
+                     '>':'.', '?':'/'}
+        char = char_dict[re_match.group()]
+
+        output = string[:re_match.start()] + char + string[re_match.end():]
+        
+    return output
 
 
 
 
 
 # list of all possible typo introduction functions
-typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7]
+typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7, typo_8, typo_9]
 
 # characters per typo introduction
 typo_frequency = 15
@@ -220,11 +246,11 @@ typo_frequency = 15
 if __name__ == '__main__':
     print('**~~~~Welcome to Typo Generator 25,000!!!~~~~**\n')
     print('The Latest and Greatest script to randomly introduce errors into perfectly good text.',
-          '\nGuaranteed to drive your neighborhood grammar nazis crazy!\n')
-    # print('First, introductions! What\'s your name?')
-    # user_name = input('> ')
+           '\nGuaranteed to drive your neighborhood grammar nazis crazy!\n')
+    print('First, introductions! What\'s your name?')
+    user_name = input('> ')
     
-    # print(f'\nGreat, {user_name}! What text would you like to generate errors in?')
+    print(f'\nGreat, {user_name}! What text would you like to generate errors in?')
     
     running = True
     while  running == True:
@@ -245,9 +271,11 @@ if __name__ == '__main__':
                 new_typo = random_typo(output_string, loop_typos)
                 output_string = new_typo[0]
                 loop_typos.pop(new_typo[1])
-                print(loop_typos)
+                # print(loop_typos)
                 
-            print(f'Result: {output_string}, {errors_to_gen}')
+            # print(f'Result: {output_string}, {errors_to_gen}')
+            print(f'Result: {output_string}')
+
             
             reroll = reroll_or()
             
@@ -259,5 +287,5 @@ if __name__ == '__main__':
             else:
                 continue
     
-    # print(f'Thanks for using Typo Generator 25,000, {user_name}! Run the script again to play again. Have a nice day!')
+    print(f'Thanks for using Typo Generator 25,000, {user_name}! Run the script again to play again. Have a nice day!')
 
