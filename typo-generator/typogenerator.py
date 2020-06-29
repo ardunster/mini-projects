@@ -243,49 +243,49 @@ typo_frequency = 15
 
 
 
-if __name__ == '__main__':
-    print('**~~~~Welcome to Typo Generator 25,000!!!~~~~**\n')
-    print('The Latest and Greatest script to randomly introduce errors into perfectly good text.',
-           '\nGuaranteed to drive your neighborhood grammar nazis crazy!\n')
-    print('First, introductions! What\'s your name?')
-    user_name = input('> ')
+# if __name__ == '__main__':
+#     print('**~~~~Welcome to Typo Generator 25,000!!!~~~~**\n')
+#     print('The Latest and Greatest script to randomly introduce errors into perfectly good text.',
+#            '\nGuaranteed to drive your neighborhood grammar nazis crazy!\n')
+#     print('First, introductions! What\'s your name?')
+#     user_name = input('> ')
     
-    print(f'\nGreat, {user_name}! What text would you like to generate errors in?')
+#     print(f'\nGreat, {user_name}! What text would you like to generate errors in?')
     
-    running = True
-    while  running == True:
-        # New sentence loop
-        user_input = get_input()
+#     running = True
+#     while  running == True:
+#         # New sentence loop
+#         user_input = get_input()
         
-        while True:
-            # Reroll loop
-            loop_typos = list(typos)
-            output_string = user_input
+#         while True:
+#             # Reroll loop
+#             loop_typos = list(typos)
+#             output_string = user_input
             
-            if (len(output_string)//typo_frequency) > 1:
-                errors_to_gen = random.randrange(1,(len(output_string)//typo_frequency))
-            else:
-                errors_to_gen = 1
+#             if (len(output_string)//typo_frequency) > 1:
+#                 errors_to_gen = random.randrange(1,(len(output_string)//typo_frequency))
+#             else:
+#                 errors_to_gen = 1
     
-            for _ in range(errors_to_gen):
-                new_typo = random_typo(output_string, loop_typos)
-                output_string = new_typo[0]
-                loop_typos.pop(new_typo[1])
-                # print(loop_typos)
+#             for _ in range(errors_to_gen):
+#                 new_typo = random_typo(output_string, loop_typos)
+#                 output_string = new_typo[0]
+#                 loop_typos.pop(new_typo[1])
+#                 # print(loop_typos)
                 
-            # print(f'Result: {output_string}, {errors_to_gen}')
-            print(f'Result: {output_string}')
+#             # print(f'Result: {output_string}, {errors_to_gen}')
+#             print(f'Result: {output_string}')
 
             
-            reroll = reroll_or()
+#             reroll = reroll_or()
             
-            if reroll == 'e':
-                running = False
-                break
-            elif reroll == 'n':
-                break
-            else:
-                continue
+#             if reroll == 'e':
+#                 running = False
+#                 break
+#             elif reroll == 'n':
+#                 break
+#             elif reroll == 'r':
+#                 continue
     
-    print(f'Thanks for using Typo Generator 25,000, {user_name}! Run the script again to play again. Have a nice day!')
+#     print(f'Thanks for using Typo Generator 25,000, {user_name}! Run the script again to play again. Have a nice day!')
 

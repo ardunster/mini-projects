@@ -11,6 +11,4 @@ To do:
 
 - enter more typo options
 - fine tune typo frequency in longer texts
-- prevent repeated filtering through the same type of typo when more than one typo is introduced
-- clean up code
 - test for bugs (already found one)
