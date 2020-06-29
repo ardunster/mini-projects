@@ -81,7 +81,6 @@ def random_typo(user_input,typos):
         try:
             return random.choice(typos)(user_input)
         except TypoError:
-            print('error')
             continue
 
 def reroll_or():
@@ -95,7 +94,9 @@ def reroll_or():
         print('Would you like to [R]eroll the errors on the current sentence, enter a [N]ew sentence, or [E]xit?')
         choice = input('> ')
     
-        if choice[0].lower() == 'r':
+        if choice == '':
+            print('Please make a selection.\n')
+        elif choice[0].lower() == 'r':
             output = 'r'
             print('Rerolling errors!')
         elif choice[0].lower() == 'n':
@@ -175,6 +176,9 @@ def typo_6(string):
     re_match = re.search('[\'",.;?!]', string)
     if not re_match:
         raise TypoError
+    elif re_match.group() == "'" or re_match.group() == '"' and re_match.start() == 0:
+        # Fix issue where moving a quote mark at the beginning of the string could cause unintended results
+        raise TypoError
     else:
         output = string[:re_match.start()-1] + string[re_match.start()] + string[re_match.start()-1] + string[re_match.end():]
         
@@ -207,21 +211,51 @@ typo_frequency = 15
 
 
 if __name__ == '__main__':
-    # print('**~~~~Welcome to Typo Generator 25,000!!!~~~~**\n')
-    # print('The Latest and Greatest script to randomly introduce errors into perfectly good text.',
-    #       '\nGuaranteed to drive your neighborhood grammar nazis crazy!\n')
+    print('**~~~~Welcome to Typo Generator 25,000!!!~~~~**\n')
+    print('The Latest and Greatest script to randomly introduce errors into perfectly good text.',
+          '\nGuaranteed to drive your neighborhood grammar nazis crazy!\n')
     # print('First, introductions! What\'s your name?')
     # user_name = input('> ')
     
     # print(f'\nGreat, {user_name}! What text would you like to generate errors in?')
     
+    running = True
+    while  running == True:
+        # New sentence loop
+        user_input = get_input()
+        
+        while True:
+            # Reroll loop
+            output_string = user_input
+            
+            if (len(output_string)//typo_frequency) > 1:
+                errors_to_gen = random.randrange(1,(len(output_string)//typo_frequency))
+            else:
+                errors_to_gen = 1
+    
+            for _ in range(errors_to_gen):
+                output_string = random_typo(output_string, typos)
+                
+            print(f'Result: {output_string}, {errors_to_gen}')
+            
+            reroll = reroll_or()
+            
+            if reroll == 'e':
+                running = False
+                break
+            elif reroll == 'n':
+                break
+            else:
+                continue
+            
+    
     # while running:
         # get the input
         # apply the typos
         # ask if we want to reroll the current typos, enter a new sentence, or exit.
-    # user_input = get_input()
+
     
-    test_string = 'Test string longer! With some extra stuff, gotta make this long enough to work, right? How many errors can we GET anyway?'
+    # test_string = 'Test string longer! With some extra stuff, gotta make this long enough to work, right? How many errors can we GET anyway?'
     
     # print(random_typo(test_string, typos))
     
@@ -232,18 +266,12 @@ if __name__ == '__main__':
     # check for valid errors first, or try to apply one at random, try a different one if it doesn't work?
     # How many errors to generate? add 1 per x words/characters, or, random of range of x per y characters. 
     
-    # output_string = user_input
-    output_string = test_string
+
+    # output_string = test_string
     
-    if (len(output_string)//typo_frequency) > 1:
-        errors_to_gen = random.randrange(1,(len(output_string)//typo_frequency))
-    else:
-        errors_to_gen = 1
-    
-    for _ in range(errors_to_gen):
-        output_string = random_typo(output_string, typos)
+
         
-    print(f'Result: {output_string}, {errors_to_gen}')
+
     
     # after generating errored result, ask: "Reroll, New Sentence, Exit"
     
@@ -254,4 +282,3 @@ if __name__ == '__main__':
 # This maybe could be fixed by making a fresh copy of the typos list for each 
 # string processed and .pop() the typo used. 
 # will try if I have time, low priority
-
