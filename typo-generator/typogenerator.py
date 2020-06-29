@@ -74,12 +74,14 @@ def get_input():
 def random_typo(user_input,typos):
     '''
     Takes a string as an argument, selects a random typo function to apply, returns
-    a string of a successful result. Retries random typos until one works.
+    tuple of a string of a successful result and the index of function used. 
+    Retries random typos until one works.
     '''
     
     while True:
         try:
-            return random.choice(typos)(user_input)
+            choice = random.randrange(len(typos))
+            return typos[choice](user_input), choice
         except TypoError:
             continue
 
@@ -226,6 +228,7 @@ if __name__ == '__main__':
         
         while True:
             # Reroll loop
+            loop_typos = list(typos)
             output_string = user_input
             
             if (len(output_string)//typo_frequency) > 1:
@@ -234,7 +237,10 @@ if __name__ == '__main__':
                 errors_to_gen = 1
     
             for _ in range(errors_to_gen):
-                output_string = random_typo(output_string, typos)
+                new_typo = random_typo(output_string, loop_typos)
+                output_string = new_typo[0]
+                loop_typos.pop(new_typo[1])
+                print(loop_typos)
                 
             print(f'Result: {output_string}, {errors_to_gen}')
             
