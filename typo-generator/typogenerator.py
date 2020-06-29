@@ -84,6 +84,32 @@ def random_typo(user_input,typos):
             print('error')
             continue
 
+def reroll_or():
+    '''
+    Validates input if player would like to reroll, play with a new string, or exit.
+    Output: a single letter representing one of the three options.
+    '''
+    choice = ''
+    
+    while choice == '':
+        print('Would you like to [R]eroll the errors on the current sentence, enter a [N]ew sentence, or [E]xit?')
+        choice = input('> ')
+    
+        if choice[0].lower() == 'r':
+            output = 'r'
+            print('Rerolling errors!')
+        elif choice[0].lower() == 'n':
+            output = 'n'
+            print('New entry!')
+        elif choice[0].lower() == 'e':
+            output = 'e'
+            print('Exiting....')
+        else:
+            print('Invalid choice, try again.\n')
+            choice = ''
+        
+    return output
+        
     
 
 def typo_1(string):
@@ -189,6 +215,10 @@ if __name__ == '__main__':
     
     # print(f'\nGreat, {user_name}! What text would you like to generate errors in?')
     
+    # while running:
+        # get the input
+        # apply the typos
+        # ask if we want to reroll the current typos, enter a new sentence, or exit.
     # user_input = get_input()
     
     test_string = 'Test string longer! With some extra stuff, gotta make this long enough to work, right? How many errors can we GET anyway?'
