@@ -231,6 +231,52 @@ def typo_9(string):
     return output
 
 
+def typo_10(string):
+    '''Typo introduction: picks a random word from input, shifts letters of one hand by 1 keyboard position toward center'''
+    working = string.split()
+    working2 = []
+    
+    shift_lh = {'q':'w', 'w':'e', 'e':'r', 'r':'t', 't':'y', 'a':'s', 's':'d', 
+                'd':'f', 'f':'g', 'g':'h', 'z':'x', 'x':'c', 'c':'v', 'v':'b',
+                'Q':'W', 'W':'E', 'E':'R', 'R':'T', 'T':'Y', 'A':'S', 'S':'D',
+                'D':'F', 'F':'G', 'G':'H', 'Z':'X', 'X':'C', 'C':'V', 'V':'B'}
+    shift_rh = {'p':'o', 'o':'i', 'i':'u', 'u':'y', 'y':'t', ';':'l', 'l':'k',
+                'k':'j', 'j':'h', '.':',', ',':'m', 'm':'n', 'n':'b', 'P':'O', 
+                'O':'I', 'I':'U', 'U':'Y', 'Y':'T', ':':'L', 'L':'K', 'K':'J', 
+                'J':'H', '>':'<', '<':'M', 'M':'N', 'N':'B', '?':'>'}
+    
+    if len(working) == 1:
+        raise TypoError
+    else:
+        rand_num = random.randrange(1,len(working))
+        re_lh = re.search('[qwertasdfgzxcv]', working[rand_num])
+        re_rh = re.search('[yuiophjkl;.,mn]', working[rand_num])
+        if re_lh and re_rh:
+            choice = random.choice((shift_rh,shift_lh))
+        elif re_lh:
+            choice = shift_lh
+        elif re_rh:
+            choice = shift_rh
+        output = ''
+        for char in working[rand_num]:
+            if char in choice.keys():
+                output += choice[char]
+            else: 
+                output += char
+        
+    for i in range(len(working)):
+        if i == rand_num:
+            working2.append(output)
+        else:
+            working2.append(working[i])
+    
+    output = ' '.join(working2)
+    
+    return output
+
+
+
+
 
 
 
