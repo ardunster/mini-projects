@@ -3,12 +3,9 @@ This is no more or less than a fun little command line script to introduce (hope
 
 Script randomly selects one or more errors to introduce and prints the result. 
 
-Uses re and random modules.
+Uses `re` and `random` modules.
 
-It currently basically works as intended, but is not complete.
 
-To do:
+It could use some more work to randomly distribute errors in longer texts, and there is a slight possibility of running out of usable errors before iterating all the requested errors, also in longer texts. Otherwise it seems to be working well, and is loads of fun to play with :D  
 
-- enter more typo options
-- fine tune typo frequency in longer texts
-- test for bugs (already found one)
+Enjoy!
