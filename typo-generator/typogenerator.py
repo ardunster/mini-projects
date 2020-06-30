@@ -39,7 +39,7 @@ typos to include:
     you're = your or youre
     they're = their or there or theyre
     # remove h from th, sh, etc
-    replace punctuation with proximate letter
+    # replace punctuation with proximate letter
     # n at end of word = ng
 '''
 
@@ -348,13 +348,35 @@ def typo_15(string):
     return output
 
 
+def typo_16(string):
+    '''Typo introduction: destruction of you're'''
+    re_match = re.search("you're", string)
+    if not re_match:
+        raise TypoError
+    else:
+        output = string[:re_match.start()] + random.choice(('your', 'yor', 'youre', 'yer')) + string[re_match.end():]
+        
+    return output
+
+
+def typo_17(string):
+    '''Typo introduction: destruction of they're'''
+    re_match = re.search("they're", string)
+    if not re_match:
+        raise TypoError
+    else:
+        output = string[:re_match.start()] + random.choice(('their', 'thier', 'theyre', 'there', 'three', 'ther', 'theyr')) + string[re_match.end():]
+        
+    return output
+
+
 
 
 
 
 # list of all possible typo introduction functions, used for random choice of typo
 typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7, typo_8, typo_9,
-         typo_10, typo_11, typo_12, typo_13, typo_14, typo_15]
+         typo_10, typo_11, typo_12, typo_13, typo_14, typo_15, typo_16, typo_17]
 
 # characters per typo introduction
 typo_frequency = 15
