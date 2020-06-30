@@ -20,14 +20,10 @@ typos to include:
     # random capitalization of leading letter of word
     # take character requiring shift key and convert to same keyboard location without shift
     insertion of proximate letter
-    extra e after t or d at end of word
+    # extra e after t or d at end of word
     o = oe
     th = ht
     p = o
-    the = hte
-    ask = aks
-    and = adn
-    ie = ei
     l = I 
     I = l
     x = z
@@ -38,7 +34,7 @@ typos to include:
     o = i, p, 9 or 0
     t = g
     # take entire word and shift letters used by one hand right or left by one keyboard space
-    double a random letter
+    # double a random letter
     sentence starting in caps converted to all caps
     you're = your or youre
     they're = their or there or theyre
@@ -257,6 +253,8 @@ def typo_10(string):
             choice = shift_lh
         elif re_rh:
             choice = shift_rh
+        else:
+            raise TypoError
         output = ''
         for char in working[rand_num]:
             if char in choice.keys():
@@ -276,7 +274,7 @@ def typo_10(string):
 
 
 def typo_11(string):
-    '''Typo introduction: random doubling of character'''
+    '''Typo introduction: random doubling of character other than space'''
     output = ''
     rand_num = random.randrange(1,len(string))
     
@@ -292,13 +290,25 @@ def typo_11(string):
     return output
 
 
+def typo_12(string):
+    '''Typo introduction: adds e after t or d at end of word'''
+    re_match = re.search('[td]\\b',string)
+    if not re_match:
+        raise TypoError
+    else:
+        output = string[:re_match.start()+1] + 'e' + string[re_match.end():]
+        
+    return output
 
 
 
 
 
-# list of all possible typo introduction functions
-typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7, typo_8, typo_9, typo_10]
+
+
+
+# list of all possible typo introduction functions, used for random choice of typo
+typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7, typo_8, typo_9, typo_10, typo_11, typo_12]
 
 # characters per typo introduction
 typo_frequency = 15
