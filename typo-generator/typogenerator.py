@@ -9,39 +9,6 @@ Created on Sun Jun 28 12:04:12 2020
 import random
 import re
 
-'''
-typos to include:
-    # skip random letter in mid word (especially consonant between vowel and e)
-    # random swap of letters
-    # random removal of whitespace or punctuation
-    # random insertion of whitespace or punctuation (punctuation near proximate letters)
-    # displacement of punctuation back one space
-    # turn capital letter lower case, move capitalization to different letter
-    # random capitalization of leading letter of word
-    # take character requiring shift key and convert to same keyboard location without shift
-    insertion of proximate letter
-    # extra e after t or d at end of word
-    # o = oe
-    th = ht
-    # p = o
-    # l = I 
-    # I = l
-    # x = z
-    # n = b
-    # m = n
-    # o = p
-    # p = [, -, 0, ;
-    # o = i, p, 9 or 0
-    # t = g
-    # take entire word and shift letters used by one hand right or left by one keyboard space
-    # double a random letter
-    sentence starting in caps converted to all caps
-    you're = your or youre
-    they're = their or there or theyre
-    # remove h from th, sh, etc
-    # replace punctuation with proximate letter
-    # n at end of word = ng
-'''
 
 class TypoError(Exception):
     pass
@@ -62,7 +29,7 @@ def get_input():
         elif output.isdigit() == True:
             print('Thought you could fool me with a number? Try again!')
             output = ''
-        elif not (set(output) & set(('a', 'e', 'i', 'o', 'u'))):
+        elif not (set(output.lower()) & set(('a', 'e', 'i', 'o', 'u'))):
             print('I\'m pretty sure it\'s not actually a sentence with no vowels. Try again!')
             output = ''
         elif len(output) >= 300:
@@ -85,6 +52,7 @@ def random_typo(user_input,typos):
             return typos[choice](user_input), choice
         except TypoError:
             continue
+
 
 def reroll_or():
     '''
@@ -205,6 +173,8 @@ def typo_8(string):
     '''Typo introduction: random capitalization of leading letter in a word'''
     working = string.split()
     if len(working) == 1:
+        raise TypoError
+    elif string.isupper():
         raise TypoError
     else:
         rand_num = random.randrange(1,len(working))
@@ -370,65 +340,87 @@ def typo_17(string):
     return output
 
 
+def typo_18(string):
+    '''Typo introduction: accidental capslock'''
+    if not string[0].isupper():
+        raise TypoError
+    else: 
+        output = string.upper()
+    
+    return output
+
+
+def typo_19(string):
+    '''Typo introduction: replace nd with dn, th with ht, etc'''
+    re_match = re.search('th|nd|ng|ch|sh', string)
+    errors = {'th':'ht','nd':'dn','ng':'gn','ch':'hc','sh':'hs'}
+    if not re_match:
+        raise TypoError
+    else:
+        output = string[:re_match.start()] + errors[re_match.group()] + string[re_match.end():]
+        
+    return output
+
+
 
 
 
 
 # list of all possible typo introduction functions, used for random choice of typo
 typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7, typo_8, typo_9,
-         typo_10, typo_11, typo_12, typo_13, typo_14, typo_15, typo_16, typo_17]
+         typo_10, typo_11, typo_12, typo_13, typo_14, typo_15, typo_16, typo_17,
+         typo_18, typo_19]
 
-# characters per typo introduction
+# characters per typo introduction. Higher number = lower chance of typos.
 typo_frequency = 15
 
 
 
 
-# if __name__ == '__main__':
-#     print('**~~~~Welcome to Typo Generator 25,000!!!~~~~**\n')
-#     print('The Latest and Greatest script to randomly introduce errors into perfectly good text.',
-#             '\nGuaranteed to drive your neighborhood grammar nazis crazy!\n')
-#     print('First, introductions! What\'s your name?')
-#     user_name = input('> ')
+if __name__ == '__main__':
+    print('**~~~~Welcome to Typo Generator 25,000!!!~~~~**\n')
+    print('The Latest and Greatest script to randomly introduce errors into perfectly good text.',
+            '\nGuaranteed to drive your neighborhood grammar nazis crazy!\n')
+    print('First, introductions! What\'s your name?')
+    user_name = input('> ')
     
-#     print(f'\nGreat, {user_name}! What text would you like to generate errors in?')
+    print(f'\nGreat, {random_typo(user_name, typos)[0]}! What text would you like to generate errors in?')
     
-#     running = True
-#     while  running == True:
-#         # New sentence loop
-#         user_input = get_input()
+    running = True
+    while  running == True:
+        # New sentence loop
+        user_input = get_input()
         
-#         while True:
-#             # Reroll loop
-#             loop_typos = list(typos)
-#             output_string = user_input
+        while True:
+            # Reroll loop
+            loop_typos = list(typos)
+            output_string = user_input
             
-#             if (len(output_string)//typo_frequency) > 1:
-#                 errors_to_gen = random.randrange(1,(len(output_string)//typo_frequency))
-#             else:
-#                 errors_to_gen = 1
+            if (len(output_string)//typo_frequency) > 1:
+                errors_to_gen = random.randrange(1,(len(output_string)//typo_frequency))
+            else:
+                errors_to_gen = 1
     
-#             for i in range(errors_to_gen):
-#                 new_typo = random_typo(output_string, loop_typos)
-#                 output_string = new_typo[0]
-#                 loop_typos.pop(new_typo[1])
-#                 if len(loop_typos) < errors_to_gen - i:
-#                     for i in range(len(typos)):
-#                         loop_typos.append(typos[i])
+            for i in range(errors_to_gen):
+                new_typo = random_typo(output_string, loop_typos)
+                output_string = new_typo[0]
+                loop_typos.pop(new_typo[1])
+                if len(loop_typos) < errors_to_gen - i:
+                    for i in range(len(typos)):
+                        loop_typos.append(typos[i])
                 
-#             # print(f'Result: {output_string}, {errors_to_gen}')
-#             print(f'Result: {output_string}')
+            print(f'\nResult: {output_string}')
 
             
-#             reroll = reroll_or()
+            reroll = reroll_or()
             
-#             if reroll == 'e':
-#                 running = False
-#                 break
-#             elif reroll == 'n':
-#                 break
-#             elif reroll == 'r':
-#                 continue
+            if reroll == 'e':
+                running = False
+                break
+            elif reroll == 'n':
+                break
+            elif reroll == 'r':
+                continue
     
-#     print(f'Thanks for using Typo Generator 25,000, {user_name}! Run the script again to play again. Have a nice day!')
+    print(f'Thanks for using Typo Generator 25,000, {random_typo(user_name, typos)[0]}! Run the script again to play again. Have a nice day!')
 
