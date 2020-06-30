@@ -38,9 +38,9 @@ typos to include:
     sentence starting in caps converted to all caps
     you're = your or youre
     they're = their or there or theyre
-    remove h from th, sh, etc
+    # remove h from th, sh, etc
     replace punctuation with proximate letter
-    n at end of word = ng
+    # n at end of word = ng
 '''
 
 class TypoError(Exception):
@@ -306,11 +306,13 @@ def typo_12(string):
 
 def typo_13(string):
     '''Typo introduction: random character swap into common errors'''
-    re_match = re.search('[oplIxnmt]', string)
+    re_match = re.search('[oplIxnmt,.]', string)
     if not re_match:
         raise TypoError
     
-    errors = {'o':('oe','p', 'i', '9', '0'), 'p':('o', '[', '-', '0', ';'), 'l':'I', 'I':'l', 'x':'z', 'n':'b', 'm':'n', 't':'g'}
+    errors = {'o':('oe','p', 'i', '9', '0'), 'p':('o', '[', '-', '0', ';'), 
+              'l':'I', 'I':'l', 'x':'z', 'n':'b', 'm':'n', 't':'g', ',':('m', 'k', 'l'),
+              '.':('l', ';')}
     output = ''
     
     while output == '':
@@ -325,12 +327,34 @@ def typo_13(string):
     return output
 
 
+def typo_14(string):
+    '''Typo introduction: adds g or d after n at end of word'''
+    re_match = re.search('[n]\\b',string)
+    if not re_match:
+        raise TypoError
+    else:
+        output = string[:re_match.start()+1] + random.choice(('g', 'd')) + string[re_match.end():]
+        
+    return output
+
+def typo_15(string):
+    '''Typo introduction: removes h from th, sh, wh, or ch'''
+    re_match = re.search('[tswc]h{1}',string)
+    if not re_match:
+        raise TypoError
+    else:
+        output = string[:re_match.start()+1] + string[re_match.end():]
+        
+    return output
+
+
 
 
 
 
 # list of all possible typo introduction functions, used for random choice of typo
-typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7, typo_8, typo_9, typo_10, typo_11, typo_12, typo_13]
+typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7, typo_8, typo_9,
+         typo_10, typo_11, typo_12, typo_13, typo_14, typo_15]
 
 # characters per typo introduction
 typo_frequency = 15
