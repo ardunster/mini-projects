@@ -18,7 +18,7 @@ typos to include:
     # displacement of punctuation back one space
     # turn capital letter lower case, move capitalization to different letter
     # random capitalization of leading letter of word
-    take character requiring shift key and convert to same keyboard location without shift
+    # take character requiring shift key and convert to same keyboard location without shift
     insertion of proximate letter
     extra e after t or d at end of word
     o = oe
@@ -37,7 +37,7 @@ typos to include:
     p = [, -, 0, ;
     o = i, p, 9 or 0
     t = g
-    take entire word and shift letters used by one hand right or left by one keyboard space
+    # take entire word and shift letters used by one hand right or left by one keyboard space
     double a random letter
     sentence starting in caps converted to all caps
     you're = your or youre
@@ -275,13 +275,30 @@ def typo_10(string):
     return output
 
 
+def typo_11(string):
+    '''Typo introduction: random doubling of character'''
+    output = ''
+    rand_num = random.randrange(1,len(string))
+    
+    for i in range(len(string)):
+        if i == rand_num:
+            if string[i] == ' ':
+                rand_num += 1
+            else:
+                output += (string[i] * 2)
+        else:
+            output += string[i]
+            
+    return output
+
+
 
 
 
 
 
 # list of all possible typo introduction functions
-typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7, typo_8, typo_9]
+typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7, typo_8, typo_9, typo_10]
 
 # characters per typo introduction
 typo_frequency = 15
