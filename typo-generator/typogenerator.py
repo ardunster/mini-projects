@@ -21,18 +21,18 @@ typos to include:
     # take character requiring shift key and convert to same keyboard location without shift
     insertion of proximate letter
     # extra e after t or d at end of word
-    o = oe
+    # o = oe
     th = ht
-    p = o
-    l = I 
-    I = l
-    x = z
-    n = b
-    m = n
-    o = p
-    p = [, -, 0, ;
-    o = i, p, 9 or 0
-    t = g
+    # p = o
+    # l = I 
+    # I = l
+    # x = z
+    # n = b
+    # m = n
+    # o = p
+    # p = [, -, 0, ;
+    # o = i, p, 9 or 0
+    # t = g
     # take entire word and shift letters used by one hand right or left by one keyboard space
     # double a random letter
     sentence starting in caps converted to all caps
@@ -64,6 +64,9 @@ def get_input():
             output = ''
         elif not (set(output) & set(('a', 'e', 'i', 'o', 'u'))):
             print('I\'m pretty sure it\'s not actually a sentence with no vowels. Try again!')
+            output = ''
+        elif len(output) >= 300:
+            print('Distribution of typos gets improbable in longer texts. Try something smaller! (Feel free to petition for longer inputs in TypoGen 2.0 :D)')
             output = ''
             
     return output
@@ -301,6 +304,25 @@ def typo_12(string):
     return output
 
 
+def typo_13(string):
+    '''Typo introduction: random character swap into common errors'''
+    re_match = re.search('[oplIxnmt]', string)
+    if not re_match:
+        raise TypoError
+    
+    errors = {'o':('oe','p', 'i', '9', '0'), 'p':('o', '[', '-', '0', ';'), 'l':'I', 'I':'l', 'x':'z', 'n':'b', 'm':'n', 't':'g'}
+    output = ''
+    
+    while output == '':
+        rand_num = random.randrange(len(string))
+        if string[rand_num] in errors.keys():
+            for i in range(len(string)):
+                if i == rand_num:
+                    output += random.choice(errors[string[i]])
+                else:
+                    output += string[i]
+   
+    return output
 
 
 
@@ -308,7 +330,7 @@ def typo_12(string):
 
 
 # list of all possible typo introduction functions, used for random choice of typo
-typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7, typo_8, typo_9, typo_10, typo_11, typo_12]
+typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7, typo_8, typo_9, typo_10, typo_11, typo_12, typo_13]
 
 # characters per typo introduction
 typo_frequency = 15
@@ -319,7 +341,7 @@ typo_frequency = 15
 # if __name__ == '__main__':
 #     print('**~~~~Welcome to Typo Generator 25,000!!!~~~~**\n')
 #     print('The Latest and Greatest script to randomly introduce errors into perfectly good text.',
-#            '\nGuaranteed to drive your neighborhood grammar nazis crazy!\n')
+#             '\nGuaranteed to drive your neighborhood grammar nazis crazy!\n')
 #     print('First, introductions! What\'s your name?')
 #     user_name = input('> ')
     
@@ -340,11 +362,13 @@ typo_frequency = 15
 #             else:
 #                 errors_to_gen = 1
     
-#             for _ in range(errors_to_gen):
+#             for i in range(errors_to_gen):
 #                 new_typo = random_typo(output_string, loop_typos)
 #                 output_string = new_typo[0]
 #                 loop_typos.pop(new_typo[1])
-#                 # print(loop_typos)
+#                 if len(loop_typos) < errors_to_gen - i:
+#                     for i in range(len(typos)):
+#                         loop_typos.append(typos[i])
                 
 #             # print(f'Result: {output_string}, {errors_to_gen}')
 #             print(f'Result: {output_string}')
