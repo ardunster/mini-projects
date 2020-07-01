@@ -41,8 +41,9 @@ def get_input():
 
 def random_typo(user_input,typos):
     '''
-    Takes a string as an argument, selects a random typo function to apply, returns
-    tuple of a string of a successful result and the index of function used. 
+    Takes a string and a list of typos as arguments, selects a random typo 
+    function to apply, returns tuple of a string of a successful result and 
+    the list index of function used. 
     Retries random typos until one works.
     '''
     
@@ -85,7 +86,7 @@ def reroll_or():
     
 
 def typo_1(string):
-    '''Typo introduction: skip a random character. Tries consonant between a vowel and e first.'''
+    '''Typo introduction: deletes a random character. Tries consonant between a vowel and e first.'''
     vce_pattern = re.compile('[aeiou][^aeiou]e') #should match vowel, consonant, e
     re_match = vce_pattern.search(string)
     if re_match:
@@ -124,7 +125,7 @@ def typo_4(string):
 
 
 def typo_5(string):
-    '''Typo introduction: addition of punctuation in reasonably possible location'''
+    '''Typo introduction: addition of unintended punctuation in reasonably possible location'''
     re_match = re.search('[mklp]', string)
     if not re_match:
         raise TypoError
@@ -148,7 +149,7 @@ def typo_6(string):
     if not re_match:
         raise TypoError
     elif re_match.group() == "'" or re_match.group() == '"' and re_match.start() == 0:
-        # Fix issue where moving a quote mark at the beginning of the string could cause unintended results
+        # Avoid issue where moving a quote mark at the beginning of the string could cause unintended results
         raise TypoError
     else:
         output = string[:re_match.start()-1] + string[re_match.start()] + string[re_match.start()-1] + string[re_match.end():]
@@ -371,7 +372,9 @@ typos = [typo_1, typo_2, typo_3, typo_4, typo_5, typo_6, typo_7, typo_8, typo_9,
          typo_10, typo_11, typo_12, typo_13, typo_14, typo_15, typo_16, typo_17,
          typo_18, typo_19]
 
-# characters per typo introduction. Higher number = lower chance of typos.
+# characters per typo introduction. Higher number = lower chance of typos. 
+# There will be a minimum of 1 typo regardless. This number should be positive
+# and greater than 0.
 typo_frequency = 15
 
 
