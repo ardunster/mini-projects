@@ -18,7 +18,7 @@ An assortment of projects for the Complete Python Bootcamp course, including a t
 
 ### Goldsilver:
 
-A script designed to run daily to scrape gold and silver prices from the web, and email price alerts when it does. Also includes suportive scripts that I used to generate the original body of data for calculating 200 day moving averages.
+A script designed to run daily to scrape gold and silver prices from the web, and email price alerts when it does. Also includes supportive scripts that I used to generate the original body of data for calculating 200 day moving averages.
 
 ### RDP:
 
@@ -32,13 +32,10 @@ A fun command line script to gather input from the user, then generate random ty
 
 ### Mean and Median:
  
-Command line script to take numerical input and return a list of inputs, the arithmetic mean, 
-and the median.
+Command line script to take numerical input and return a list of inputs, the arithmetic mean, and the median.
 
 ### Dice Roller:
 
-Take input for a dice roll and returns results. Any size or quantity 
-of die can be used. Displays results and sum, and saves results
-and sum to a log file.
+Take input for a dice roll and returns results. Any size or quantity of die can be used. Displays results and sum, and saves results and sum to a log file.
 
-I had a couple ideas to expand the functionality of this script which I may some day try, such as programming it to understand modifier syntax (the +4 part of 1d6+4), or if I get ambitious, designing a user interface, or even going so far as to produce visualizations of rolling dice, for fun. 
+I had a couple ideas to expand the functionality of this script which I may some day try, such as programming it to understand modifier syntax (the +4 part of 1d6+4), or if I get ambitious, designing a user interface, or even going so far as to produce visualizations of rolling dice, for fun. Alternatively, I may move this functionality into WBA once I get the core features of that working; sometimes it would be useful to make random rolls in doing world building and story design. 
