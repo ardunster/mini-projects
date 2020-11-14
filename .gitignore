@@ -124,6 +124,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# vscode
+.vscode/
+
 #mini-projects specific files
 **/cpb_blackjack_players.data
 **/goldprices.xlsx
@@ -136,3 +139,4 @@ dmypy.json
 **/silverprices copy.xlsx
 **/goldsilver_alerts_log.txt
 *config*.py
+roll_log.txt

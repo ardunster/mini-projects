@@ -467,6 +467,7 @@ if __name__ == '__main__':
     ready = True
     while ready:
         player_turn = True
+        player_lost = False
         while player_turn:
             while bet == 0:
                 bet = player[current].place_bet()
