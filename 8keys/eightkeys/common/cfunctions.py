@@ -1,6 +1,8 @@
 class CognitiveFunction:
     """
-    Object to store data about Cognitive Function being evaluated
+    Object to store data about Cognitive Function being evaluated.
+    Keep in mind, the functions in the Question class modify preference and
+    development (and total) values to track scores!
     """
     def __init__(self, name, dominant_types, auxiliary_types, opposite_name):
         self.name = name
@@ -8,7 +10,14 @@ class CognitiveFunction:
         self.auxiliary_types = auxiliary_types
         self.opposite_name = opposite_name
         self.preference = 0
+        self.total_pref = 0
         self.development = 0
+        self.total_dev = 0
+
+    def __str__(self):
+        string = f"{self.name}: Preference score {self.preference}, "
+        string += f"Development score: {self.development}"
+        return string
 
 
 def create_functions():
